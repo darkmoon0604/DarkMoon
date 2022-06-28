@@ -1,0 +1,8 @@
+#Directores
+
+.vs/
+bin/
+bin-tmp/
+
+#Files
+*.user
