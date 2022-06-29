@@ -60,6 +60,7 @@
       <PreprocessorDefinitions>DM_PLATFORM_WINDOWS;DM_BUILD_DLL;_WINDLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <BrowseInformation>true</BrowseInformation>
+      <AdditionalIncludeDirectories>$(SolutionDir)DarkMoon\3rd\spdlog\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -77,6 +78,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DM_PLATFORM_WINDOWS;DM_BUILD_DLL;_WINDLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)DarkMoon\3rd\spdlog\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -86,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\DarkMoon\Log.h" />
     <ClInclude Include="src\DarkMoon\Application.h" />
     <ClInclude Include="src\DarkMoon\Core.h" />
     <ClInclude Include="src\DarkMoon.h" />
@@ -93,6 +96,7 @@
     <ClInclude Include="src\DMpch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DarkMoon\Log.cpp" />
     <ClCompile Include="src\DarkMoon\Application.cpp" />
     <ClCompile Include="src\DMpch.cpp" />
   </ItemGroup>

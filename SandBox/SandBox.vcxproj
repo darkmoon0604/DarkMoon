@@ -60,7 +60,7 @@
       <PreprocessorDefinitions>DM_PLATFORM_WINDOWS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <BrowseInformation>true</BrowseInformation>
-      <AdditionalIncludeDirectories>$(SolutionDir)DarkMoon\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DarkMoon\src\;$(SolutionDir)DarkMoon\3rd\spdlog\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +78,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DM_PLATFORM_WINDOWS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DarkMoon\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DarkMoon\src\;$(SolutionDir)DarkMoon\3rd\spdlog\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

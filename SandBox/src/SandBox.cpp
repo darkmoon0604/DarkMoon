@@ -18,5 +18,8 @@ private:
 
 DarkMoon::Application* DarkMoon::CreateApplication()
 {
+	DarkMoon::Log::Init("SANBOX");
+	DM_LOG_WARN("init");
+
 	return new SandBox();
 }

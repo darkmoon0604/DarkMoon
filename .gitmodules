@@ -1,0 +1,3 @@
+[submodule "DarkMoon/3rd/spdlog"]
+	path = DarkMoon/3rd/spdlog
+	url = https://github.com/gabime/spdlog

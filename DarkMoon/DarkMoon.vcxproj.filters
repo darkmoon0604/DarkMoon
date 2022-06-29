@@ -30,12 +30,18 @@
     <ClInclude Include="src\DarkMoon\EntryPoint.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\DarkMoon\Log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DarkMoon\Application.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\DMpch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DarkMoon\Log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
