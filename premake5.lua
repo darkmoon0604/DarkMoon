@@ -1,5 +1,4 @@
 
--- 工程名字
 workspace "DarkMoon"
     architecture "x64"
     
@@ -9,10 +8,8 @@ workspace "DarkMoon"
         "Release"
     }
 
--- 输入目录
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- 动态链接库名字
 project "DarkMoon"
     location "DarkMoon"
     kind "SharedLib"
@@ -29,13 +26,14 @@ project "DarkMoon"
 
     includedirs    
     {
+        "%{prj.name}/src",
         "%{prj.name}/3rd/spdlog/include"
     }
 
     filter "system:windows"
         cppdialect "C++17"
         staticruntime "On"
-        systemversion "latest" --"10.0"
+        systemversion "latest"
 
         defines
         {

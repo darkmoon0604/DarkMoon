@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Core.h"
+#include "Events/Event.h"
 
 namespace DarkMoon {
-	class DRAKMOON_API Application
+	class DARKMOON_API Application
 	{
 	public:
 		Application();
