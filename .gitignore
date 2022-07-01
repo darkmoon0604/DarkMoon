@@ -6,3 +6,6 @@ bin-tmp/
 
 #Files
 *.user
+#*.sln
+#*.vcxproj
+#*.filters

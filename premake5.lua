@@ -1,4 +1,6 @@
 
+
+-- ��������
 workspace "DarkMoon"
     architecture "x64"
     
@@ -8,8 +10,10 @@ workspace "DarkMoon"
         "Release"
     }
 
+-- ����Ŀ¼
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- ��̬���ӿ�����
 project "DarkMoon"
     location "DarkMoon"
     kind "SharedLib"
@@ -26,14 +30,13 @@ project "DarkMoon"
 
     includedirs    
     {
-        "%{prj.name}/src",
         "%{prj.name}/3rd/spdlog/include"
     }
 
     filter "system:windows"
         cppdialect "C++17"
         staticruntime "On"
-        systemversion "latest"
+        systemversion "latest" --"10.0"
 
         defines
         {

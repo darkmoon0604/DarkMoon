@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace DarkMoon
 {
 	class DARKMOON_API KeyEvent : public Event

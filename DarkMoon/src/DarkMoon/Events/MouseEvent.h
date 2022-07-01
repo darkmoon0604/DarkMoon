@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace DarkMoon
 {
 	class DARKMOON_API MouseMovedEvent : public Event
@@ -15,12 +13,12 @@ namespace DarkMoon
 
 		}
 
-		inline GetX()
+		inline float GetX()
 		{
 			return m_MouseX;
 		}
 
-		inline GetY()
+		inline float GetY()
 		{
 			return m_MouseY;
 		}
@@ -47,12 +45,12 @@ namespace DarkMoon
 
 		}
 
-		inline GetXOffset()
+		inline float GetXOffset()
 		{
 			return m_XOffset;
 		}
 
-		inline GetYOffset()
+		inline float GetYOffset()
 		{
 			return m_YOffset;
 		}

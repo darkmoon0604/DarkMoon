@@ -1,3 +1,5 @@
+#include "dmpch.h"
+
 #include "Log.h"
 
 namespace DarkMoon

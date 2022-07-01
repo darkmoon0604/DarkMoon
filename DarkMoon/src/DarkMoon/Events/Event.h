@@ -1,9 +1,8 @@
 #pragma once
 
-#include "DarkMoon/Core.h"
+#include "dmpch.h"
 
-#include <string>
-#include <functional>
+#include "DarkMoon/Core.h"
 
 namespace DarkMoon
 {
