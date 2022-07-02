@@ -1,6 +1,4 @@
 
-
--- ��������
 workspace "DarkMoon"
     architecture "x64"
     
@@ -10,10 +8,14 @@ workspace "DarkMoon"
         "Release"
     }
 
--- ����Ŀ¼
+
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- ��̬���ӿ�����
+IncludeDir = {}
+IncludeDir["GLFW"] = "DarkMoon/3rd/GLFW/include"
+
+include "DarkMoon/3rd/GLFW"
+
 project "DarkMoon"
     location "DarkMoon"
     kind "SharedLib"
@@ -21,6 +23,9 @@ project "DarkMoon"
 
     targetdir ("bin/" .. outputDir .. "/%{prj.name}")
     objdir ("bin-tmp/" .. outputDir .. "/%{prj.name}")
+
+    pchheader "dmpch.h"
+    pchsource "DarkMoon/dmpch.cpp"
 
     files
     {
@@ -30,7 +35,15 @@ project "DarkMoon"
 
     includedirs    
     {
-        "%{prj.name}/3rd/spdlog/include"
+        "%{prj.name}/src",
+        "%{prj.name}/3rd/spdlog/include",
+        "%{IncludeDir.GLFW}",
+    }
+
+    links
+    {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"

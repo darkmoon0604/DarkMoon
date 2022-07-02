@@ -1,12 +1,11 @@
 #include "dmpch.h"
 
 #include "Application.h"
-#include "Events/ApplicationEvent.h"
-#include "Log.h"
 
 namespace DarkMoon {
 	Application::Application()
 	{
+		m_Window = std::unique_ptr<Window>(Window::Create());
 	}
 
 	Application::~Application()
@@ -15,12 +14,9 @@ namespace DarkMoon {
 
 	void Application::Run()
 	{
-		WindowResizeEvent e(1280, 720);
-		DM_LOG_TRACE(e);
-
-		while (true)
+		while (m_isRuning)
 		{
-
+			m_Window->OnUpdate();
 		}
 	}
 }
