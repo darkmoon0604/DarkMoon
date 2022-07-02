@@ -24,8 +24,8 @@ project "DarkMoon"
     targetdir ("bin/" .. outputDir .. "/%{prj.name}")
     objdir ("bin-tmp/" .. outputDir .. "/%{prj.name}")
 
-    pchheader "dmpch.h"
-    pchsource "DarkMoon/dmpch.cpp"
+    pchheader "pch.h"
+    pchsource "DarkMoon/pch.cpp"
 
     files
     {
