@@ -1,3 +1,6 @@
 [submodule "DarkMoon/3rd/spdlog"]
 	path = DarkMoon/3rd/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "DarkMoon/3rd/GLFW"]
+	path = DarkMoon/3rd/GLFW
+	url = https://github.com/YangMengtao/glfw.git
