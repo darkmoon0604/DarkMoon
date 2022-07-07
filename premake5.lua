@@ -64,10 +64,12 @@ project "DarkMoon"
 
     filter "configurations:Debug"
         defines "DM_DEBUG"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "DM_RELESE"
+        buildoptions "/Md"
         optimize "On"
 
 
@@ -108,8 +110,10 @@ project "SandBox"
 
     filter "configurations:Debug"
         defines "DM_DEBUG"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "DM_RELESE"
+        buildoptions "/Md"
         optimize "On"

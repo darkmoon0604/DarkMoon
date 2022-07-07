@@ -47,6 +47,11 @@ namespace DarkMoon
 			return GetName(); 
 		}
 
+		inline bool IsHandled() const
+		{
+			return m_Handled;
+		}
+
 		inline bool IsInCategory(int category)
 		{
 			return GetCategoryFlags() & category;

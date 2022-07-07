@@ -23,6 +23,11 @@ namespace DarkMoon {
 			glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			for (auto layer : m_LayerStack)
+			{
+				layer->OnUpdate();
+			}
+
 			m_Window->OnUpdate();
 		}
 	}
@@ -32,7 +37,24 @@ namespace DarkMoon {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FUNC(OnWindowClosed));
 
-		DM_LOG_CORE_INFO("APP : {0}", e);
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		{
+			(*--it)->OnEvent(e);
+			if (e.IsHandled())
+			{
+				break;
+			}
+		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
 	}
 
 	bool Application::OnWindowClosed(WindowClosedEvent& e)
