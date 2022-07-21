@@ -6,8 +6,11 @@
 namespace DarkMoon {
 #define BIND_EVENT_FUNC(f) std::bind(&Application::f, this, std::placeholders::_1)
 
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	{
+		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(BIND_EVENT_FUNC(OnEvent));
 	}
@@ -20,9 +23,6 @@ namespace DarkMoon {
 	{
 		while (m_isRuning)
 		{
-			glClearColor(1.0f, 0.5f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-
 			for (auto layer : m_LayerStack)
 			{
 				layer->OnUpdate();
@@ -50,11 +50,13 @@ namespace DarkMoon {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	bool Application::OnWindowClosed(WindowClosedEvent& e)

@@ -5,6 +5,8 @@
 #include "DarkMoon/Events/KeyEvent.h"
 #include "DarkMoon/Events/MouseEvent.h"
 
+#include <glad/glad.h>
+
 namespace DarkMoon
 {
 	static bool s_GLFWInit = false;
@@ -53,6 +55,8 @@ namespace DarkMoon
 			nullptr);
 
 		glfwMakeContextCurrent(m_Window);
+		int state = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		DM_CORE_ASSERT(state, "Failed initialize glad")
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 

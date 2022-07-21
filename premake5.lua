@@ -13,8 +13,12 @@ outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "DarkMoon/3rd/GLFW/include"
+IncludeDir["Glad"] = "DarkMoon/3rd/Glad/include"
+IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
 
 include "DarkMoon/3rd/GLFW"
+include "DarkMoon/3rd/Glad"
+include "DarkMoon/3rd/imgui"
 
 project "DarkMoon"
     location "DarkMoon"
@@ -38,11 +42,15 @@ project "DarkMoon"
         "%{prj.name}/src",
         "%{prj.name}/3rd/spdlog/include",
         "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.imgui}",
     }
 
     links
     {
         "GLFW",
+        "Glad",
+        "imgui",
         "opengl32.lib"
     }
 
@@ -54,7 +62,8 @@ project "DarkMoon"
         defines
         {
             "DM_PLATFORM_WINDOWS",
-            "DM_BUILD_DLL"
+            "DM_BUILD_DLL",
+            "GLFW_INCLUDE_NONE",
         }
 
         postbuildcommands

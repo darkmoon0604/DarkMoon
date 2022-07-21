@@ -4,3 +4,6 @@
 [submodule "DarkMoon/3rd/GLFW"]
 	path = DarkMoon/3rd/GLFW
 	url = https://github.com/YangMengtao/glfw.git
+[submodule "DarkMoon/3rd/imgui"]
+	path = DarkMoon/3rd/imgui
+	url = https://github.com/YangMengtao/imgui
