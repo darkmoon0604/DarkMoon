@@ -104,6 +104,13 @@ namespace DarkMoon
 			}
 		});
 
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent e(keycode);
+			data.m_CallBack(e);
+		});
+
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) 
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

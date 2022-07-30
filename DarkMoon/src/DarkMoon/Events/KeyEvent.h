@@ -67,4 +67,24 @@ namespace DarkMoon
 
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
+
+	class DARKMOON_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		KeyTypedEvent(int keyCode)
+			: KeyEvent(keyCode)
+		{
+
+		}
+
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+			ss << "KeyTypedEvent : KeyCode = " << m_KeyCode ;
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(KeyTyped)
+	};
 }

@@ -22,3 +22,5 @@
 
 
 #define BIT(x) (1 << x)
+
+#define DM_BIND_EVENT_FUNC(func) std::bind(&func, this, std::placeholders::_1)

@@ -14,7 +14,7 @@ namespace DarkMoon
 		None = 0,
 		WindowClosed, WindowResize, WindowFocus, WindosLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
 	};
 

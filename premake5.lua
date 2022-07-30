@@ -1,7 +1,8 @@
 
 workspace "DarkMoon"
     architecture "x64"
-    
+    startpoject "SandBox"
+
     configurations
     {
         "Debug",
