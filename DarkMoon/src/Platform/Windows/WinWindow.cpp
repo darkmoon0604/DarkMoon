@@ -58,7 +58,7 @@ namespace DarkMoon
 		int state = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		DM_CORE_ASSERT(state, "Failed initialize glad")
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
+		SetVSync(false);
 
 		//set glfw callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -154,8 +154,8 @@ namespace DarkMoon
 
 	void WinWindow::OnUpdate()
 	{
-		glfwPollEvents();
 		glfwSwapBuffers(m_Window);
+		glfwPollEvents();
 	}
 
 	void WinWindow::SetVSync(bool isEnabled)

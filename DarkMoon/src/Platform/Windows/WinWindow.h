@@ -29,6 +29,12 @@ namespace DarkMoon
 		{
 			m_Data.m_CallBack = callback;
 		}
+
+		inline virtual void* GetNativeWindow() const
+		{
+			return m_Window;
+		}
+
 		void SetVSync(bool isEnabled) override;
 		bool IsVSync() const override;
 	private:

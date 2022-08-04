@@ -23,7 +23,7 @@ namespace DarkMoon
 	{
 		None,
 		Applicaction = BIT(0),
-		Input = BIT(1),
+		InputBoard = BIT(1),
 		Keyboard = BIT(2),
 		Mouse = BIT(3),
 		MouseButton = BIT(4),

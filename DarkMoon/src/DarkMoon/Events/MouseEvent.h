@@ -31,7 +31,7 @@ namespace DarkMoon
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CALSS_CATEGORY(Mouse | Input)
+		EVENT_CALSS_CATEGORY(Mouse | InputBoard)
 	private:
 		float m_MouseX, m_MouseY;
 	};
@@ -63,7 +63,7 @@ namespace DarkMoon
 		}
 
 		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CALSS_CATEGORY(Mouse | Input)
+		EVENT_CALSS_CATEGORY(Mouse | InputBoard)
 	private:
 		float m_XOffset, m_YOffset;
 	};
@@ -76,7 +76,7 @@ namespace DarkMoon
 			return m_Button;
 		}
 
-		EVENT_CALSS_CATEGORY(Mouse | Input)
+		EVENT_CALSS_CATEGORY(Mouse | InputBoard)
 	protected:
 		MouseButtonEvent(int button)
 			: m_Button(button)

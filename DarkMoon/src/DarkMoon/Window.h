@@ -38,6 +38,8 @@ namespace DarkMoon
 		virtual void SetVSync(bool isEnabled) = 0;
 		virtual bool IsVSync() const = 0;
 
+		virtual void* GetNativeWindow() const = 0;
+
 		static Window* Create(const WindowProperty& props = WindowProperty());
 	};
 }

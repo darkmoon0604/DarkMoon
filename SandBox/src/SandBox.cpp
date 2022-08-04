@@ -25,8 +25,8 @@ class SandBox : public DarkMoon::Application
 public:
 	SandBox()
 	{
-		PushLayer(new ExampleLayer());
-		//PushOverlay(new DarkMoon::ImguiLayer());
+		//PushLayer(new ExampleLayer());
+		PushOverlay(new DarkMoon::ImguiLayer());
 	}
 	~SandBox()
 	{

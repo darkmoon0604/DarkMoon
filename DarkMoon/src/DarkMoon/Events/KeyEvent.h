@@ -12,7 +12,7 @@ namespace DarkMoon
 			return m_KeyCode;
 		}
 
-		EVENT_CALSS_CATEGORY(Keyboard | Input)
+		EVENT_CALSS_CATEGORY(Keyboard | InputBoard)
 	protected:
 		KeyEvent(int keyCode)
 			: m_KeyCode(keyCode)

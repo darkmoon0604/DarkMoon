@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Application.h"
+//#include "DarkMoon/Input.h"
 
 #include <glad/glad.h>
 
@@ -20,15 +21,18 @@ namespace DarkMoon {
 
 	void Application::Run()
 	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		while (m_isRuning)
 		{
+			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
 			for (auto layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 			}
+
+			//auto [x, y] = Input::GetMousePosition();
+			//DM_LOG_CORE_TRACE("{0}, {1}", x, y);
 
 			m_Window->OnUpdate();
 		}
