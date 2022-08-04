@@ -6,7 +6,7 @@ public:
 	ExampleLayer()
 		: Layer("Example Layer")
 	{
-
+		
 	}
 
 	void OnUpdate() override
@@ -25,7 +25,7 @@ class SandBox : public DarkMoon::Application
 public:
 	SandBox()
 	{
-		//PushLayer(new ExampleLayer());
+		PushLayer(new ExampleLayer());
 		PushOverlay(new DarkMoon::ImguiLayer());
 	}
 	~SandBox()

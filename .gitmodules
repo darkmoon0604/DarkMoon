@@ -7,3 +7,6 @@
 [submodule "DarkMoon/3rd/imgui"]
 	path = DarkMoon/3rd/imgui
 	url = https://github.com/YangMengtao/imgui
+[submodule "DarkMoon/3rd/glm"]
+	path = DarkMoon/3rd/glm
+	url = https://github.com/g-truc/glm.git

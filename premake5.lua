@@ -1,7 +1,7 @@
 
 workspace "DarkMoon"
     architecture "x64"
-    startpoject "SandBox"
+    startproject "SandBox"
 
     configurations
     {
@@ -16,6 +16,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "DarkMoon/3rd/GLFW/include"
 IncludeDir["Glad"] = "DarkMoon/3rd/Glad/include"
 IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
+IncludeDir["glm"] = "DarkMoon/3rd/glm"
 
 include "DarkMoon/3rd/GLFW"
 include "DarkMoon/3rd/Glad"
@@ -36,6 +37,8 @@ project "DarkMoon"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/3rd/glm/glm/**.hpp",
+        "%{prj.name}/3rd/glm/glm/**.inl",
     }
 
     includedirs    
@@ -45,6 +48,7 @@ project "DarkMoon"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imgui}",
+        "%{IncludeDir.glm}",
     }
 
     links
@@ -100,7 +104,8 @@ project "SandBox"
     includedirs
     {
         "DarkMoon/3rd/spdlog/include",
-        "DarkMoon/src"
+        "DarkMoon/src",
+        "%{IncludeDir.glm}",
     }
 
     links
