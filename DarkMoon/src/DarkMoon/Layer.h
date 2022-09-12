@@ -14,6 +14,8 @@ namespace DarkMoon
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate() {}
+		virtual void OnImguiRender() {}
+
 		virtual void OnEvent(Event& e)
 		{
 

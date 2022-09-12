@@ -13,6 +13,9 @@ namespace DarkMoon {
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(DM_BIND_EVENT_FUNC(Application::OnEvent));
+
+		m_ImguiLayer = new ImguiLayer();
+		PushOverlay(m_ImguiLayer);
 	}
 
 	Application::~Application()
@@ -26,10 +29,12 @@ namespace DarkMoon {
 			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_ImguiLayer->OnBegin();
 			for (auto layer : m_LayerStack)
 			{
-				layer->OnUpdate();
+				layer->OnImguiRender();
 			}
+			m_ImguiLayer->OnEnd();
 
 			//auto [x, y] = Input::GetMousePosition();
 			//DM_LOG_CORE_TRACE("{0}, {1}", x, y);

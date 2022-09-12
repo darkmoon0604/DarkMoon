@@ -18,6 +18,13 @@ public:
 	{
 		DM_LOG_INFO("{0}", e);
 	}
+
+	void OnImguiRender() override
+	{
+// 		ImGui::Begin("Test");
+// 		ImGui::Text("Imgui text test");
+// 		ImGui::End();
+	}
 };
 
 class SandBox : public DarkMoon::Application
@@ -25,8 +32,7 @@ class SandBox : public DarkMoon::Application
 public:
 	SandBox()
 	{
-		PushLayer(new ExampleLayer());
-		PushOverlay(new DarkMoon::ImguiLayer());
+		PushLayer(new ExampleLayer());		
 	}
 	~SandBox()
 	{

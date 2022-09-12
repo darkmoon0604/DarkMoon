@@ -105,6 +105,7 @@ project "SandBox"
     {
         "DarkMoon/3rd/spdlog/include",
         "DarkMoon/src",
+        --"DarkMoon/3rd/imgui",
         "%{IncludeDir.glm}",
     }
 

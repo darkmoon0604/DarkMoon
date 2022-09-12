@@ -5,6 +5,7 @@
 #include "Events/ApplicationEvent.h"
 #include "Window.h"
 #include "LayerStack.h"
+#include "DarkMoon/Imgui/ImguiLayer.h"
 
 namespace DarkMoon {
 	class DARKMOON_API Application
@@ -31,6 +32,7 @@ namespace DarkMoon {
 		bool OnWindowClosed(WindowClosedEvent& e);
 	private:
 		std::unique_ptr<Window> m_Window;
+		ImguiLayer* m_ImguiLayer;
 		bool m_isRuning = true;
 		LayerStack m_LayerStack;
 
