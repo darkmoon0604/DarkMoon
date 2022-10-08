@@ -1,8 +1,9 @@
 #pragma once
 
 #include "DarkMoon/Window.h"
+#include "DarkMoon/Render/GraphicsContext.h"
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 namespace DarkMoon
 {
@@ -42,6 +43,7 @@ namespace DarkMoon
 		virtual void ShutDown();
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{

@@ -5,7 +5,7 @@
 #include "DarkMoon/Events/KeyEvent.h"
 #include "DarkMoon/Events/MouseEvent.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace DarkMoon
 {
@@ -54,9 +54,10 @@ namespace DarkMoon
 			nullptr,
 			nullptr);
 
-		glfwMakeContextCurrent(m_Window);
-		int state = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		DM_CORE_ASSERT(state, "Failed initialize glad")
+		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(false);
 
@@ -154,7 +155,7 @@ namespace DarkMoon
 
 	void WinWindow::OnUpdate()
 	{
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffer();
 		glfwPollEvents();
 	}
 

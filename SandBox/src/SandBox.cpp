@@ -11,12 +11,12 @@ public:
 
 	void OnUpdate() override
 	{
-		DM_LOG_INFO("{0} update", m_DebugName);
+		//DM_LOG_INFO("{0} update", m_DebugName);
 	}
 
 	void OnEvent(DarkMoon::Event& e) override
 	{
-		DM_LOG_INFO("{0}", e);
+		//DM_LOG_INFO("{0}", e);
 	}
 
 	void OnImguiRender() override

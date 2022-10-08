@@ -15,23 +15,25 @@ outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "DarkMoon/3rd/GLFW/include"
 IncludeDir["Glad"] = "DarkMoon/3rd/Glad/include"
-IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
+--IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
 IncludeDir["glm"] = "DarkMoon/3rd/glm"
 
 include "DarkMoon/3rd/GLFW"
 include "DarkMoon/3rd/Glad"
-include "DarkMoon/3rd/imgui"
+--include "DarkMoon/3rd/imgui"
 
 project "DarkMoon"
     location "DarkMoon"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputDir .. "/%{prj.name}")
     objdir ("bin-tmp/" .. outputDir .. "/%{prj.name}")
 
     pchheader "pch.h"
-    pchsource "DarkMoon/pch.cpp"
+    pchsource "DarkMoon/src/pch.cpp"
 
     files
     {
@@ -47,7 +49,7 @@ project "DarkMoon"
         "%{prj.name}/3rd/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.imgui}",
+        --"%{IncludeDir.imgui}",
         "%{IncludeDir.glm}",
     }
 
@@ -55,42 +57,49 @@ project "DarkMoon"
     {
         "GLFW",
         "Glad",
-        "imgui",
+        --"ImGui",
         "opengl32.lib"
     }
 
+    defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
     filter "system:windows"
-        cppdialect "C++17"
-        staticruntime "On"
-        systemversion "latest" --"10.0"
+        systemversion "latest"
 
         defines
         {
             "DM_PLATFORM_WINDOWS",
             "DM_BUILD_DLL",
             "GLFW_INCLUDE_NONE",
+            --"DYNAMIC_LINK",
+            --"ENABLE_IMGUI",
         }
 
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/SandBox/")
-        }
+        -- postbuildcommands
+        -- {
+        --     ("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputDir .. "/SandBox/")
+        -- }
 
     filter "configurations:Debug"
         defines "DM_DEBUG"
-        buildoptions "/MDd"
-        symbols "On"
+        runtime "Debug"
+        symbols "on"
 
     filter "configurations:Release"
-        defines "DM_RELESE"
-        buildoptions "/Md"
-        optimize "On"
+        defines "DM_RELEASE"
+        runtime "Release"
+        optimize "on"
 
 
 project "SandBox"
     location "SandBox"
     kind "ConsoleApp"
     language "C++"
+    cppdialect "C++17"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputDir .. "/%{prj.name}")
     objdir ("bin-tmp/" .. outputDir .. "/%{prj.name}")
@@ -105,7 +114,7 @@ project "SandBox"
     {
         "DarkMoon/3rd/spdlog/include",
         "DarkMoon/src",
-        --"DarkMoon/3rd/imgui",
+        "DarkMoon/3rd",
         "%{IncludeDir.glm}",
     }
 
@@ -115,9 +124,7 @@ project "SandBox"
     }
 
     filter "system:windows"
-        cppdialect "C++17"
-        staticruntime "On"
-        systemversion "latest" --"10.0"
+        systemversion "latest"
 
         defines
         {
@@ -126,10 +133,10 @@ project "SandBox"
 
     filter "configurations:Debug"
         defines "DM_DEBUG"
-        buildoptions "/MDd"
-        symbols "On"
+        runtime "Debug"
+        symbols "on"
 
     filter "configurations:Release"
-        defines "DM_RELESE"
-        buildoptions "/Md"
-        optimize "On"
+        defines "DM_RELEASE"
+        runtime "Release"
+        optimize "on"
