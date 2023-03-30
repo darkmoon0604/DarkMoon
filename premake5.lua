@@ -15,12 +15,12 @@ outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "DarkMoon/3rd/GLFW/include"
 IncludeDir["Glad"] = "DarkMoon/3rd/Glad/include"
---IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
+IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
 IncludeDir["glm"] = "DarkMoon/3rd/glm"
 
 include "DarkMoon/3rd/GLFW"
 include "DarkMoon/3rd/Glad"
---include "DarkMoon/3rd/imgui"
+include "DarkMoon/3rd/imgui"
 
 project "DarkMoon"
     location "DarkMoon"
@@ -49,7 +49,7 @@ project "DarkMoon"
         "%{prj.name}/3rd/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        --"%{IncludeDir.imgui}",
+        "%{IncludeDir.imgui}",
         "%{IncludeDir.glm}",
     }
 
@@ -57,7 +57,7 @@ project "DarkMoon"
     {
         "GLFW",
         "Glad",
-        --"ImGui",
+        "ImGui",
         "opengl32.lib"
     }
 
@@ -75,7 +75,7 @@ project "DarkMoon"
             "DM_BUILD_DLL",
             "GLFW_INCLUDE_NONE",
             --"DYNAMIC_LINK",
-            --"ENABLE_IMGUI",
+            "ENABLE_IMGUI",
         }
 
         -- postbuildcommands
