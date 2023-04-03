@@ -3,11 +3,6 @@
 
 namespace DarkMoon
 {
-	LayerStack::LayerStack()
-	{
-
-	}
-
 	LayerStack::~LayerStack()
 	{
 		for (auto layer : m_Layers)
@@ -24,7 +19,7 @@ namespace DarkMoon
 
 	void LayerStack::PushOverlay(Layer* layer)
 	{
-		m_Layers.emplace_back(layer);		
+		m_Layers.emplace_back(layer);	
 	}
 
 	void LayerStack::PopLayer(Layer* layer)

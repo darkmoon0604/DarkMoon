@@ -27,7 +27,7 @@ namespace DarkMoon
 	public:
 		using EventCallBackFunc = std::function<void(Event&)>;
 
-		virtual ~Window() {}
+		virtual ~Window() = default;
 
 		virtual void OnUpdate() = 0;
 

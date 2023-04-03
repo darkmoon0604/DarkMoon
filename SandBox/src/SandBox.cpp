@@ -1,4 +1,5 @@
 #include "DarkMoon.h"
+//#include "Imgui/imgui.h"
 
 class ExampleLayer : public DarkMoon::Layer
 {
@@ -21,9 +22,9 @@ public:
 
 	void OnImguiRender() override
 	{
-// 		ImGui::Begin("Test");
-// 		ImGui::Text("Imgui text test");
-// 		ImGui::End();
+ 		//ImGui::Begin("Test");
+ 		//ImGui::Text("Imgui text test");
+ 		//ImGui::End();
 	}
 };
 
@@ -32,7 +33,7 @@ class SandBox : public DarkMoon::Application
 public:
 	SandBox()
 	{
-		PushLayer(new ExampleLayer());		
+		//PushLayer(new ExampleLayer());		
 	}
 	~SandBox()
 	{

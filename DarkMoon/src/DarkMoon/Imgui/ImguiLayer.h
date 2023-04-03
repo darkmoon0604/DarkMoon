@@ -11,7 +11,7 @@ namespace DarkMoon
 	{
 	public:
 		ImguiLayer();
-		~ImguiLayer();
+		~ImguiLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

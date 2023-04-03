@@ -9,6 +9,7 @@ namespace DarkMoon {
 
 	Application::Application()
 	{
+		DM_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(DM_BIND_EVENT_FUNC(Application::OnEvent));
@@ -17,9 +18,82 @@ namespace DarkMoon {
 		PushOverlay(m_ImguiLayer);
 
 		std::string vertexSource = R"(
-			#version 460 core
+			#version 330 core
 			layout(location = 0) in vec3 aPos;
+			layout(location = 1) in vec4 aColor;
 			
+			out vec3 vPos;
+			out vec4 vColor;
+
+			void main()
+			{
+				vPos = aPos;
+				vColor = aColor;
+				gl_Position = vec4(aPos, 1.0);
+			}
+		)";
+
+		std::string fragmentSource = R"(
+			#version 330 core
+			layout(location = 0) out vec4 fColor;
+			
+			in vec3 vPos;
+			in vec4 vColor;
+
+			void main()
+			{
+				fColor = vec4(vPos * 0.5 + 0.5, 1.0);
+				fColor = vColor;
+			}
+		)";
+
+		m_Shader.reset(new Shader(vertexSource, fragmentSource));
+
+		float vertices[3 * 7]
+		{
+			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
+		};
+		m_vertexArray.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "aPos" },
+			{ ShaderDataType::Float4, "aColor" }
+		};
+		vertexBuffer->SetLayout(layout);
+		m_vertexArray->AddVertexBuffer(vertexBuffer);
+
+		unsigned int indices[] = { 0, 1, 2 };
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+		m_vertexArray->SetIndexBuffer(indexBuffer);
+
+		float squareVertices[3 * 4] = {
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f
+		};
+		m_SquareVertexArray.reset(VertexArray::Create());
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB->SetLayout({
+			{ ShaderDataType::Float3, "aPos" }
+			});
+		m_SquareVertexArray->AddVertexBuffer(squareVB);
+
+		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
+		m_SquareVertexArray->SetIndexBuffer(squareIB);
+
+		std::string blueShaderVertexSource = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 aPos;
+
 			out vec3 vPos;
 
 			void main()
@@ -29,44 +103,20 @@ namespace DarkMoon {
 			}
 		)";
 
-		std::string fragmentSource = R"(
-			#version 460 core
-			layout(location = 0) out vec4 fColor;
-			
-			in vec3 vPos;
+		std::string blueShaderFragmentSource = R"(
+		#version 330 core
 
-			void main()
-			{
-				fColor = vec4(vPos * 0.5 + 0.5, 1.0);
-			}
-		)";
+		layout(location = 0) out vec4 color;
 
-		m_Shader.reset(new Shader(vertexSource, fragmentSource));
+		in vec3 vPos;
 
-		float vertices[9]
+		void main()
 		{
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f,
-		};
-
-		unsigned int indices[] = { 0, 1, 2 };
-
-		glGenVertexArrays(1, &m_VAO);
-		glBindVertexArray(m_VAO);
-
-		m_VBO.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-
-		m_IBO.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
-
+			color = vec4(0.2, 0.3, 0.8, 1.0);
+		}
+		)";
+		m_BlueShader.reset(new Shader(blueShaderVertexSource, blueShaderFragmentSource));
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //GL_LINE
-	}
-
-	Application::~Application()
-	{
 	}
 
 	void Application::Run()
@@ -76,9 +126,18 @@ namespace DarkMoon {
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			m_BlueShader->Use();
+			m_SquareVertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_SquareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			m_Shader->Use();
-			glBindVertexArray(m_VAO);
-			glDrawElements(GL_TRIANGLES, m_IBO->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_vertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+			//for (Layer* layer : m_LayerStack)
+			//{
+			//	layer->OnUpdate();
+			//}
 
 			m_ImguiLayer->OnBegin();
 			for (auto layer : m_LayerStack)
@@ -126,5 +185,4 @@ namespace DarkMoon {
 		m_isRuning = false;
 		return true;
 	}
-
 }

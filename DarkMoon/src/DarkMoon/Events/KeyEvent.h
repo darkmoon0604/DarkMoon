@@ -77,7 +77,6 @@ namespace DarkMoon
 
 		}
 
-
 		std::string ToString() const override
 		{
 			std::stringstream ss;

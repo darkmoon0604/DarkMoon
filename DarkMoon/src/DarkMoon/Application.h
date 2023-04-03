@@ -11,6 +11,7 @@
 
 #include "DarkMoon/Render/Shader.h"
 #include "DarkMoon/Render/VertexBuffer.h"
+#include "DarkMoon/Render/VertexArray.h"
 #include "DarkMoon/Render/IndexBuffer.h"
 
 namespace DarkMoon {
@@ -18,7 +19,7 @@ namespace DarkMoon {
 	{
 	public:
 		Application();
-		virtual ~Application();
+		virtual ~Application() = default;
 
 		void Run();
 		void OnEvent(Event& e);
@@ -42,10 +43,11 @@ namespace DarkMoon {
 		bool m_isRuning = true;
 		LayerStack m_LayerStack;
 
-		unsigned int m_VAO;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VBO;
-		std::unique_ptr<IndexBuffer> m_IBO;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_vertexArray;
+
+		std::shared_ptr<Shader> m_BlueShader;
+		std::shared_ptr<VertexArray> m_SquareVertexArray;
 	private:
 		static Application* s_Instance;
 	};

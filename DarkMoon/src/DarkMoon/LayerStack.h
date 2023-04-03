@@ -10,7 +10,7 @@ namespace DarkMoon
 	class DARKMOON_API LayerStack
 	{
 	public:
-		LayerStack();
+		LayerStack() = default;
 		~LayerStack();
 		
 		void PushLayer(Layer* layer);
