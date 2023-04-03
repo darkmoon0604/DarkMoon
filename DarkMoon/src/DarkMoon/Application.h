@@ -38,9 +38,7 @@ namespace DarkMoon {
 		bool OnWindowClosed(WindowClosedEvent& e);
 	private:
 		std::unique_ptr<Window> m_Window;
-#if ENABLE_IMGUI
 		ImguiLayer* m_ImguiLayer;
-#endif
 		bool m_isRuning = true;
 		LayerStack m_LayerStack;
 
