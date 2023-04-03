@@ -75,8 +75,6 @@ project "DarkMoon"
             "DM_BUILD_DLL",
             "GLFW_INCLUDE_NONE",
             --"DYNAMIC_LINK",
-            "ENABLE_IMGUI",
-            "IMGL3W_IMPL",
         }
 
         -- postbuildcommands
