@@ -3,20 +3,17 @@
 #include "DarkMoon/Core/Core.h"
 
 #include <string>
-#include <glm/glm.hpp>
 
 namespace DarkMoon
 {
 	class DARKMOON_API Shader
 	{
 	public:
-		Shader(const std::string vertexSource, const std::string fragmentSource);
-		~Shader();
+		virtual ~Shader() = default;
 
-		void Use() const;
-		void UnUse() const;
-		void UpLoadUniformMat4(const std::string& name, const glm::mat4& matrix);
-	private:
-		uint32_t m_ShaderId;
+		virtual void Use() const = 0;
+		virtual void UnUse() const = 0;
+
+		static Shader* Create(const std::string& vertexSource, const std::string& fragmentSource);
 	};
 }

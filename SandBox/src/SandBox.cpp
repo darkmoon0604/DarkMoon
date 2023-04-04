@@ -1,5 +1,11 @@
 #include "DarkMoon.h"
-//#include "Imgui/imgui.h"
+
+#include "Imgui/imgui.h"
+
+#include <Platform/OpenGL/OpenGLShader.h>
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public DarkMoon::Layer
 {
@@ -14,6 +20,7 @@ public:
 			layout(location = 1) in vec4 aColor;
 			
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 vPos;
 			out vec4 vColor;
@@ -22,7 +29,7 @@ public:
 			{
 				vPos = aPos;
 				vColor = aColor;
-				gl_Position = u_ViewProjection * vec4(aPos, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(aPos, 1.0);
 			}
 		)";
 
@@ -40,7 +47,7 @@ public:
 			}
 		)";
 
-		m_Shader.reset(new DarkMoon::Shader(vertexSource, fragmentSource));
+		m_Shader.reset(DarkMoon::Shader::Create(vertexSource, fragmentSource));
 
 		float vertices[3 * 7]
 		{
@@ -64,10 +71,10 @@ public:
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		float squareVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f,  0.5f, 0.0f
 		};
 		m_SquareVertexArray.reset(DarkMoon::VertexArray::Create());
 		std::shared_ptr<DarkMoon::VertexBuffer> squareVB;
@@ -87,14 +94,15 @@ public:
 			
 			layout(location = 0) in vec3 aPos;
 
-			uniform mat4 u_ViewProjection;			
+			uniform mat4 u_ViewProjection;		
+			uniform mat4 u_Transform;	
 
 			out vec3 vPos;
 
 			void main()
 			{
 				vPos = aPos;
-				gl_Position = u_ViewProjection * vec4(aPos, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(aPos, 1.0);
 			}
 		)";
 
@@ -105,12 +113,14 @@ public:
 
 		in vec3 vPos;
 
+		uniform vec3 u_Color;
+
 		void main()
 		{
-			color = vec4(0.2, 0.3, 0.8, 1.0);
+			color = vec4(u_Color, 1.0);
 		}
 		)";
-		m_BlueShader.reset(new DarkMoon::Shader(blueShaderVertexSource, blueShaderFragmentSource));
+		m_BlueShader.reset(DarkMoon::Shader::Create(blueShaderVertexSource, blueShaderFragmentSource));
 	}
 
 	void OnUpdate(DarkMoon::TimeStep timeStep) override
@@ -150,7 +160,18 @@ public:
 		m_Camera.SetRotation(m_CameraRotation);
 
 		DarkMoon::Render::BeginScene(m_Camera);
-		DarkMoon::Render::Submit(m_BlueShader, m_SquareVertexArray);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->Use();
+		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				DarkMoon::Render::Submit(m_BlueShader, m_SquareVertexArray, transform);
+			}
+		}
 		DarkMoon::Render::Submit(m_Shader, m_VertexArray);
 		DarkMoon::Render::EndScene();
 	}
@@ -162,9 +183,9 @@ public:
 
 	void OnImguiRender() override
 	{
- 		//ImGui::Begin("Test");
- 		//ImGui::Text("Imgui text test");
- 		//ImGui::End();
+		ImGui::Begin("Setting");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 private:
 	std::shared_ptr<DarkMoon::Shader> m_Shader;
@@ -179,6 +200,8 @@ private:
 
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 100.0f;
+
+	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 
 class SandBox : public DarkMoon::Application
