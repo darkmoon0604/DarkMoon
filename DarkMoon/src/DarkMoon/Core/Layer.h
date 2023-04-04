@@ -1,6 +1,8 @@
 #pragma once
 
 #include "DarkMoon/Core/Core.h"
+#include "DarkMoon/Core/TimeStep.h"
+
 #include "DarkMoon/Events/Event.h"
 
 namespace DarkMoon
@@ -13,7 +15,7 @@ namespace DarkMoon
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(TimeStep timeStep) {}
 		virtual void OnImguiRender() {}
 
 		virtual void OnEvent(Event& e)
