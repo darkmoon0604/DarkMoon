@@ -13,6 +13,7 @@
 #include "DarkMoon/Render/VertexBuffer.h"
 #include "DarkMoon/Render/VertexArray.h"
 #include "DarkMoon/Render/IndexBuffer.h"
+#include "DarkMoon/Render/OrthographicCamera.h"
 
 namespace DarkMoon {
 	class DARKMOON_API Application
@@ -48,6 +49,8 @@ namespace DarkMoon {
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareVertexArray;
+
+		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};

@@ -8,9 +8,11 @@ namespace DarkMoon {
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		: m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		DM_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
+		//WindowProperty wp = WindowProperty("DarkMoon Engine", 1920, 1080);
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(DM_BIND_EVENT_FUNC(Application::OnEvent));
 
@@ -22,6 +24,8 @@ namespace DarkMoon {
 			layout(location = 0) in vec3 aPos;
 			layout(location = 1) in vec4 aColor;
 			
+			uniform mat4 u_ViewProjection;
+
 			out vec3 vPos;
 			out vec4 vColor;
 
@@ -29,7 +33,7 @@ namespace DarkMoon {
 			{
 				vPos = aPos;
 				vColor = aColor;
-				gl_Position = vec4(aPos, 1.0);
+				gl_Position = u_ViewProjection * vec4(aPos, 1.0);
 			}
 		)";
 
@@ -94,12 +98,14 @@ namespace DarkMoon {
 			
 			layout(location = 0) in vec3 aPos;
 
+			uniform mat4 u_ViewProjection;			
+
 			out vec3 vPos;
 
 			void main()
 			{
 				vPos = aPos;
-				gl_Position = vec4(aPos, 1.0);
+				gl_Position = u_ViewProjection * vec4(aPos, 1.0);
 			}
 		)";
 
@@ -126,14 +132,12 @@ namespace DarkMoon {
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 			RenderCommand::Clear();
 
-			Render::BeginScene();
+			m_Camera.SetPosition({ 0.5f, 0.5f, 0.0f });
+			m_Camera.SetPosition(45.0f);
 
-			m_BlueShader->Use();
-			Render::Submit(m_SquareVertexArray);
-
-			m_Shader->Use();
-			Render::Submit(m_VertexArray);
-
+			Render::BeginScene(m_Camera);
+			Render::Submit(m_BlueShader, m_SquareVertexArray);
+			Render::Submit(m_Shader, m_VertexArray);
 			Render::EndScene();
 
 			for (Layer* layer : m_LayerStack)
