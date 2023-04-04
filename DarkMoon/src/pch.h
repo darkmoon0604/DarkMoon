@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "DarkMoon/Log.h"
+#include "DarkMoon/Core/Log.h"
 
 #ifdef DM_PLATFORM_WINDOWS
 #include <Windows.h>

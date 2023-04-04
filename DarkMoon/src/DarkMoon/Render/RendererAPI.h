@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "DarkMoon/Core.h"
+#include "DarkMoon/Core/Core.h"
 #include "VertexArray.h"
 
 namespace DarkMoon

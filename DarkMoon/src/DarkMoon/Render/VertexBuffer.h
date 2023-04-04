@@ -1,5 +1,5 @@
 #pragma once
-#include "DarkMoon/Core.h"
+#include "DarkMoon/Core/Core.h"
 #include "DarkMoon/Render/BufferLayout.h"
 
 namespace DarkMoon

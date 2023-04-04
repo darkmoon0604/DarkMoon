@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DarkMoon/Window.h"
+#include "DarkMoon/Core/Window.h"
 #include "DarkMoon/Render/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>

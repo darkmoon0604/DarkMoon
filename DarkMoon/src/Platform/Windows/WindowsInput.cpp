@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "WindowsInput.h"
-#include "DarkMoon/Application.h"
+#include "DarkMoon/Core/Application.h"
 
 #include <GLFW/glfw3.h>
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "DarkMoon/Core.h"
+#include "DarkMoon/Core/Core.h"
 
 #include "DarkMoon/Render/VertexBuffer.h"
 #include "DarkMoon/Render/IndexBuffer.h"

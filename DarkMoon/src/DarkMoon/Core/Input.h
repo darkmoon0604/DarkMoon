@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DarkMoon/Core.h"
+#include "DarkMoon/Core/Core.h"
 
 namespace DarkMoon
 {

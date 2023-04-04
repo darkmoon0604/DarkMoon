@@ -4,8 +4,8 @@
 #include "Window.h"
 #include "LayerStack.h"
 
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
+#include "DarkMoon/Events/Event.h"
+#include "DarkMoon/Events/ApplicationEvent.h"
 
 #include "DarkMoon/Imgui/ImguiLayer.h"
 
