@@ -19,8 +19,8 @@ public:
 			layout(location = 0) in vec3 aPos;
 			layout(location = 1) in vec4 aColor;
 			
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
+			uniform mat4 uViewProjection;
+			uniform mat4 uTransform;
 
 			out vec3 vPos;
 			out vec4 vColor;
@@ -29,7 +29,7 @@ public:
 			{
 				vPos = aPos;
 				vColor = aColor;
-				gl_Position = u_ViewProjection * u_Transform * vec4(aPos, 1.0);
+				gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0);
 			}
 		)";
 
@@ -94,15 +94,15 @@ public:
 			
 			layout(location = 0) in vec3 aPos;
 
-			uniform mat4 u_ViewProjection;		
-			uniform mat4 u_Transform;	
+			uniform mat4 uViewProjection;		
+			uniform mat4 uTransform;	
 
 			out vec3 vPos;
 
 			void main()
 			{
 				vPos = aPos;
-				gl_Position = u_ViewProjection * u_Transform * vec4(aPos, 1.0);
+				gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0);
 			}
 		)";
 
@@ -113,11 +113,11 @@ public:
 
 		in vec3 vPos;
 
-		uniform vec3 u_Color;
+		uniform vec3 uColor;
 
 		void main()
 		{
-			color = vec4(u_Color, 1.0);
+			color = vec4(uColor, 1.0);
 		}
 		)";
 		m_BlueShader.reset(DarkMoon::Shader::Create(blueShaderVertexSource, blueShaderFragmentSource));
@@ -162,7 +162,7 @@ public:
 		DarkMoon::Render::BeginScene(m_Camera);
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->Use();
-		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->UploadUniformFloat3("uColor", m_SquareColor);
 		for (int y = 0; y < 20; y++)
 		{
 			for (int x = 0; x < 20; x++)
