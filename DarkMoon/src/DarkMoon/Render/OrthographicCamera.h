@@ -27,7 +27,7 @@ namespace DarkMoon
 			return m_Rotation;
 		}
 
-		void SetPosition(float rotation)
+		void SetRotation(float rotation)
 		{
 			m_Rotation = rotation;
 			RecalculateViewMatrix();
