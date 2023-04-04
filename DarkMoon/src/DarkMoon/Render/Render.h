@@ -25,7 +25,7 @@ namespace DarkMoon
 			glm::mat4 m_ViewProjectionMatrix;
 		};
 
-		static SceneData* m_SceneData;
+		static SceneData* s_SceneData;
 	};
 }
 
