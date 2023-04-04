@@ -44,7 +44,7 @@ namespace DarkMoon {
 		LayerStack m_LayerStack;
 
 		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_vertexArray;
+		std::shared_ptr<VertexArray> m_VertexArray;
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareVertexArray;

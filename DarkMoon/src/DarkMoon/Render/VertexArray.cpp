@@ -8,14 +8,14 @@ namespace DarkMoon
 {
 	VertexArray* VertexArray::Create()
 	{
-		switch (Render::GetRenderAPI())
+		switch (Render::GetAPI())
 		{
-		case RenderAPI::None:
+		case RendererAPI::API::None:
 			DM_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 			return nullptr;
-		case RenderAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexArray();
-		case RenderAPI::DirectX:
+		case RendererAPI::API::DirectX:
 			DM_CORE_ASSERT(false, "RendererAPI::DirectX is currently not supported!");
 			return nullptr;
 		}

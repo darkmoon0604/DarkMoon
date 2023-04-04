@@ -1,26 +1,22 @@
 #pragma once
-#include "DarkMoon/Core.h"
 
-#include <string>
+#include "DarkMoon/Core.h"
+#include "RenderCommand.h"
 
 namespace DarkMoon
 {
-	enum class RenderAPI
-	{
-		None = 0,
-		OpenGL = 1,
-		DirectX = 2,
-	};
-
 	class DARKMOON_API Render
 	{
 	public:
-		inline static RenderAPI GetRenderAPI()
+		static void BeginScene();
+		static void EndScene();
+
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+
+		inline static RendererAPI::API GetAPI()
 		{
-			return s_CurrentRenderAPI;
+			return RendererAPI::GetAPI();
 		}
-	private:
-		static RenderAPI s_CurrentRenderAPI;
 	};
 }
 

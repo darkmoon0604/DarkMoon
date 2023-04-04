@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Application.h"
 
-#include <glad/glad.h>
+#include "DarkMoon/Render/Render.h"
 
 namespace DarkMoon {
 
@@ -55,7 +55,7 @@ namespace DarkMoon {
 			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
-		m_vertexArray.reset(VertexArray::Create());
+		m_VertexArray.reset(VertexArray::Create());
 		std::shared_ptr<VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 		BufferLayout layout = {
@@ -63,12 +63,12 @@ namespace DarkMoon {
 			{ ShaderDataType::Float4, "aColor" }
 		};
 		vertexBuffer->SetLayout(layout);
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indices[] = { 0, 1, 2 };
 		std::shared_ptr<IndexBuffer> indexBuffer;
 		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
-		m_vertexArray->SetIndexBuffer(indexBuffer);
+		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		float squareVertices[3 * 4] = {
 			-0.75f, -0.75f, 0.0f,
@@ -123,21 +123,23 @@ namespace DarkMoon {
 	{
 		while (m_isRuning)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			RenderCommand::Clear();
+
+			Render::BeginScene();
 
 			m_BlueShader->Use();
-			m_SquareVertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Render::Submit(m_SquareVertexArray);
 
 			m_Shader->Use();
-			m_vertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Render::Submit(m_VertexArray);
 
-			//for (Layer* layer : m_LayerStack)
-			//{
-			//	layer->OnUpdate();
-			//}
+			Render::EndScene();
+
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnUpdate();
+			}
 
 			m_ImguiLayer->OnBegin();
 			for (auto layer : m_LayerStack)
