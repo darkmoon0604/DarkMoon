@@ -158,7 +158,8 @@ public:
 
 		m_TextureShader.reset(DarkMoon::Shader::Create(textureShaderVertexSource, textureShaderFragmentSource));
 
-		m_Texture2D = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
+		m_Texture2D = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_Texture2D1 = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
 
 		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_TextureShader)->Use();
 		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_TextureShader)->UploadUniformInt("uTexture", 0);
@@ -215,7 +216,9 @@ public:
 		}
 		m_Texture2D->Bind();
 		DarkMoon::Render::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		DarkMoon::Render::Submit(m_Shader, m_VertexArray);
+		m_Texture2D1->Bind();
+		DarkMoon::Render::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		//DarkMoon::Render::Submit(m_Shader, m_VertexArray);
 		DarkMoon::Render::EndScene();
 	}
 
@@ -237,7 +240,7 @@ private:
 	DarkMoon::Ref<DarkMoon::Shader> m_BlueShader, m_TextureShader;
 	DarkMoon::Ref<DarkMoon::VertexArray> m_SquareVertexArray;
 
-	DarkMoon::Ref<DarkMoon::Texture2D> m_Texture2D;
+	DarkMoon::Ref<DarkMoon::Texture2D> m_Texture2D, m_Texture2D1;
 
 	DarkMoon::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

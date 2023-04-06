@@ -7,6 +7,11 @@ namespace DarkMoon
 {
 	Render::SceneData* Render::s_SceneData = new Render::SceneData;
 
+	void Render::Init()
+	{
+		RenderCommand::Init();
+	}
+
 	void Render::BeginScene(OrthographicCamera& camera)
 	{
 		s_SceneData->m_ViewProjectionMatrix = camera.GetViewProjectionMatrix();

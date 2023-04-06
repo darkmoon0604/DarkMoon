@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "Application.h"
+#include "DarkMoon/Render/Render.h"
 
 #include <GLFW/glfw3.h>
 
@@ -15,6 +16,8 @@ namespace DarkMoon {
 		//WindowProperty wp = WindowProperty("DarkMoon Engine", 1920, 1080);
 		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallBack(DM_BIND_EVENT_FUNC(Application::OnEvent));
+
+		Render::Init();
 
 		m_ImguiLayer = new ImguiLayer();
 		PushOverlay(m_ImguiLayer);

@@ -10,6 +10,7 @@ namespace DarkMoon
 	class DARKMOON_API Render
 	{
 	public:
+		static void Init();
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
