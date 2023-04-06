@@ -13,42 +13,6 @@ public:
 	ExampleLayer()
 		: Layer("Example Layer"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
 	{
-
-		std::string vertexSource = R"(
-			#version 330 core
-			layout(location = 0) in vec3 aPos;
-			layout(location = 1) in vec4 aColor;
-			
-			uniform mat4 uViewProjection;
-			uniform mat4 uTransform;
-
-			out vec3 vPos;
-			out vec4 vColor;
-
-			void main()
-			{
-				vPos = aPos;
-				vColor = aColor;
-				gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0);
-			}
-		)";
-
-		std::string fragmentSource = R"(
-			#version 330 core
-			layout(location = 0) out vec4 fColor;
-			
-			in vec3 vPos;
-			in vec4 vColor;
-
-			void main()
-			{
-				fColor = vec4(vPos * 0.5 + 0.5, 1.0);
-				fColor = vColor;
-			}
-		)";
-
-		m_Shader.reset(DarkMoon::Shader::Create(vertexSource, fragmentSource));
-
 		float vertices[3 * 7]
 		{
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -90,73 +54,9 @@ public:
 		squareIB.reset(DarkMoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
 
-		std::string blueShaderVertexSource = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 aPos;
-
-			uniform mat4 uViewProjection;		
-			uniform mat4 uTransform;	
-
-			out vec3 vPos;
-
-			void main()
-			{
-				vPos = aPos;
-				gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0);
-			}
-		)";
-
-		std::string blueShaderFragmentSource = R"(
-		#version 330 core
-
-		layout(location = 0) out vec4 color;
-
-		in vec3 vPos;
-
-		uniform vec3 uColor;
-
-		void main()
-		{
-			color = vec4(uColor, 1.0);
-		}
-		)";
-		m_BlueShader.reset(DarkMoon::Shader::Create(blueShaderVertexSource, blueShaderFragmentSource));
-
-		std::string textureShaderVertexSource = R"(
-			#version 330 core
-
-			layout(location = 0) in vec3 aPos;
-			layout(location = 1) in vec2 aTexcoord;
-
-			uniform mat4 uViewProjection;
-			uniform mat4 uTransform;
-
-			out vec2 vTexCoord;
-
-			void main()
-			{
-				vTexCoord = aTexcoord;
-				gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0f);
-			}
-		)";
-
-		std::string textureShaderFragmentSource = R"(
-			#version 330 core
-
-			layout(location = 0) out vec4 color;
-
-			in vec2 vTexCoord;
-
-			uniform sampler2D uTexture;
-
-			void main()
-			{
-				color = texture(uTexture, vTexCoord);
-			}
-		)";
-
-		m_TextureShader.reset(DarkMoon::Shader::Create(textureShaderVertexSource, textureShaderFragmentSource));
+		m_Shader.reset(DarkMoon::Shader::Create("assets/shaders/triangle.glsl"));
+		m_BlueShader.reset(DarkMoon::Shader::Create("assets/shaders/square.glsl"));
+		m_TextureShader.reset(DarkMoon::Shader::Create("assets/shaders/texture.glsl"));
 
 		m_Texture2D = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_Texture2D1 = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
@@ -218,7 +118,7 @@ public:
 		DarkMoon::Render::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_Texture2D1->Bind();
 		DarkMoon::Render::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		//DarkMoon::Render::Submit(m_Shader, m_VertexArray);
+		DarkMoon::Render::Submit(m_Shader, m_VertexArray);
 		DarkMoon::Render::EndScene();
 	}
 
