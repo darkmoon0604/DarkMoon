@@ -215,7 +215,7 @@ public:
 		}
 		m_Texture2D->Bind();
 		DarkMoon::Render::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-		//DarkMoon::Render::Submit(m_Shader, m_VertexArray);
+		DarkMoon::Render::Submit(m_Shader, m_VertexArray);
 		DarkMoon::Render::EndScene();
 	}
 
