@@ -13,7 +13,7 @@ namespace DarkMoon {
 		DM_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 		//WindowProperty wp = WindowProperty("DarkMoon Engine", 1920, 1080);
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallBack(DM_BIND_EVENT_FUNC(Application::OnEvent));
 
 		m_ImguiLayer = new ImguiLayer();

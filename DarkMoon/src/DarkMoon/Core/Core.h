@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef DM_PLATFORM_WINDOWS
 	#if DYNAMIC_LINK
 		#ifdef DM_BUILD_DLL
@@ -29,4 +31,11 @@
 
 #define DM_BIND_EVENT_FUNC(func) std::bind(&func, this, std::placeholders::_1)
 
-//#define IMGL3W_IMPL
+namespace DarkMoon
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

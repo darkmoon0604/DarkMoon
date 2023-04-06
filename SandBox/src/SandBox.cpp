@@ -56,7 +56,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 		m_VertexArray.reset(DarkMoon::VertexArray::Create());
-		std::shared_ptr<DarkMoon::VertexBuffer> vertexBuffer;
+		DarkMoon::Ref<DarkMoon::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(DarkMoon::VertexBuffer::Create(vertices, sizeof(vertices)));
 		DarkMoon::BufferLayout layout = {
 			{ DarkMoon::ShaderDataType::Float3, "aPos" },
@@ -66,26 +66,27 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		unsigned int indices[] = { 0, 1, 2 };
-		std::shared_ptr<DarkMoon::IndexBuffer> indexBuffer;
+		DarkMoon::Ref<DarkMoon::IndexBuffer> indexBuffer;
 		indexBuffer.reset(DarkMoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 		m_SquareVertexArray.reset(DarkMoon::VertexArray::Create());
-		std::shared_ptr<DarkMoon::VertexBuffer> squareVB;
+		DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB;
 		squareVB.reset(DarkMoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
-			{ DarkMoon::ShaderDataType::Float3, "aPos" }
+			{ DarkMoon::ShaderDataType::Float3, "aPos" },
+			{ DarkMoon::ShaderDataType::Float2, "aTexcoord" },
 			});
 		m_SquareVertexArray->AddVertexBuffer(squareVB);
 
 		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<DarkMoon::IndexBuffer> squareIB;
+		DarkMoon::Ref<DarkMoon::IndexBuffer> squareIB;
 		squareIB.reset(DarkMoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
 
@@ -121,6 +122,46 @@ public:
 		}
 		)";
 		m_BlueShader.reset(DarkMoon::Shader::Create(blueShaderVertexSource, blueShaderFragmentSource));
+
+		std::string textureShaderVertexSource = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 aPos;
+			layout(location = 1) in vec2 aTexcoord;
+
+			uniform mat4 uViewProjection;
+			uniform mat4 uTransform;
+
+			out vec2 vTexCoord;
+
+			void main()
+			{
+				vTexCoord = aTexcoord;
+				gl_Position = uViewProjection * uTransform * vec4(aPos, 1.0f);
+			}
+		)";
+
+		std::string textureShaderFragmentSource = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 color;
+
+			in vec2 vTexCoord;
+
+			uniform sampler2D uTexture;
+
+			void main()
+			{
+				color = texture(uTexture, vTexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(DarkMoon::Shader::Create(textureShaderVertexSource, textureShaderFragmentSource));
+
+		m_Texture2D = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
+
+		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_TextureShader)->Use();
+		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_TextureShader)->UploadUniformInt("uTexture", 0);
 	}
 
 	void OnUpdate(DarkMoon::TimeStep timeStep) override
@@ -172,7 +213,9 @@ public:
 				DarkMoon::Render::Submit(m_BlueShader, m_SquareVertexArray, transform);
 			}
 		}
-		DarkMoon::Render::Submit(m_Shader, m_VertexArray);
+		m_Texture2D->Bind();
+		DarkMoon::Render::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		//DarkMoon::Render::Submit(m_Shader, m_VertexArray);
 		DarkMoon::Render::EndScene();
 	}
 
@@ -188,11 +231,13 @@ public:
 		ImGui::End();
 	}
 private:
-	std::shared_ptr<DarkMoon::Shader> m_Shader;
-	std::shared_ptr<DarkMoon::VertexArray> m_VertexArray;
+	DarkMoon::Ref<DarkMoon::Shader> m_Shader;
+	DarkMoon::Ref<DarkMoon::VertexArray> m_VertexArray;
 
-	std::shared_ptr<DarkMoon::Shader> m_BlueShader;
-	std::shared_ptr<DarkMoon::VertexArray> m_SquareVertexArray;
+	DarkMoon::Ref<DarkMoon::Shader> m_BlueShader, m_TextureShader;
+	DarkMoon::Ref<DarkMoon::VertexArray> m_SquareVertexArray;
+
+	DarkMoon::Ref<DarkMoon::Texture2D> m_Texture2D;
 
 	DarkMoon::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

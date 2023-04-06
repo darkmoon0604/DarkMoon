@@ -17,6 +17,7 @@ IncludeDir["GLFW"] = "DarkMoon/3rd/GLFW/include"
 IncludeDir["Glad"] = "DarkMoon/3rd/Glad/include"
 IncludeDir["imgui"] = "DarkMoon/3rd/imgui"
 IncludeDir["glm"] = "DarkMoon/3rd/glm"
+IncludeDir["stb_image"] = "DarkMoon/3rd/stb_image"
 
 include "DarkMoon/3rd/GLFW"
 include "DarkMoon/3rd/Glad"
@@ -41,6 +42,8 @@ project "DarkMoon"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/3rd/glm/glm/**.hpp",
         "%{prj.name}/3rd/glm/glm/**.inl",
+        "%{prj.name}/3rd/stb_image/**.h",
+        "%{prj.name}/3rd/stb_image/**.cpp",
     }
 
     includedirs    
@@ -51,6 +54,7 @@ project "DarkMoon"
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imgui}",
         "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}",
     }
 
     links

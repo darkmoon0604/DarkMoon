@@ -16,6 +16,7 @@
 // RENDERER
 #include "DarkMoon/Render/Render.h"
 #include "DarkMoon/Render/RenderCommand.h"
+#include "DarkMoon/Render/Texture.h"
 
 #include "DarkMoon/Render/IndexBuffer.h"
 #include "DarkMoon/Render/VertexBuffer.h"
