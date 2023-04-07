@@ -11,7 +11,7 @@ class ExampleLayer : public DarkMoon::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example Layer"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+		: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f)
 	{
 		float vertices[3 * 7]
 		{
@@ -67,41 +67,14 @@ public:
 
 	void OnUpdate(DarkMoon::TimeStep timeStep) override
 	{
-		//DM_LOG_INFO("{0} update", m_DebugName);
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_LEFT))
-		{
-			m_CameraPosition.x += m_CameraMoveSpeed * timeStep;
-		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_RIGHT))
-		{
-			m_CameraPosition.x -= m_CameraMoveSpeed * timeStep;
-		}
+		// camera
+		m_CameraController.OnUpdate(timeStep);
 
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_UP))
-		{
-			m_CameraPosition.y -= m_CameraMoveSpeed * timeStep;
-		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_DOWN))
-		{
-			m_CameraPosition.y += m_CameraMoveSpeed * timeStep;
-		}
-
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_A))
-		{
-			m_CameraRotation += m_CameraRotationSpeed * timeStep;
-		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_D))
-		{
-			m_CameraRotation -= m_CameraRotationSpeed * timeStep;
-		}
-
+		// render
 		DarkMoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		DarkMoon::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		DarkMoon::Render::BeginScene(m_Camera);
+		DarkMoon::Render::BeginScene(m_CameraController.GetCamera());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->Use();
 		std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_BlueShader)->UploadUniformFloat3("uColor", m_SquareColor);
@@ -125,6 +98,7 @@ public:
 	void OnEvent(DarkMoon::Event& e) override
 	{
 		//DM_LOG_INFO("{0}", e);
+		m_CameraController.OnEvent(e);
 	}
 
 	void OnImguiRender() override
@@ -143,12 +117,7 @@ private:
 
 	DarkMoon::Ref<DarkMoon::Texture2D> m_Texture2D, m_Texture2D1;
 
-	DarkMoon::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraMoveSpeed = 5.0f;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraRotationSpeed = 100.0f;
+	DarkMoon::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };

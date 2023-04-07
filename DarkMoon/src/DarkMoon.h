@@ -17,12 +17,12 @@
 #include "DarkMoon/Render/Render.h"
 #include "DarkMoon/Render/RenderCommand.h"
 #include "DarkMoon/Render/Texture.h"
-
 #include "DarkMoon/Render/IndexBuffer.h"
 #include "DarkMoon/Render/VertexBuffer.h"
 #include "DarkMoon/Render/VertexArray.h"
 
-#include "DarkMoon/Render/OrthographicCamera.h"
+#include "DarkMoon/Camera/OrthographicCamera.h"
+#include "DarkMoon/Camera/OrthographicCameraController.h"
 
 // ENTRY POINT
 #include "DarkMoon/Core/EntryPoint.h"

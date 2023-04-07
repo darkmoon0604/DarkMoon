@@ -2,7 +2,7 @@
 
 #include "DarkMoon/Core/Core.h"
 #include "RenderCommand.h"
-#include "OrthographicCamera.h"
+#include "DarkMoon/Camera/OrthographicCamera.h"
 #include "Shader.h"
 
 namespace DarkMoon
