@@ -54,9 +54,9 @@ public:
 		squareIB.reset(DarkMoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
 
-		m_Shader.reset(DarkMoon::Shader::Create("assets/shaders/triangle.glsl"));
-		m_BlueShader.reset(DarkMoon::Shader::Create("assets/shaders/square.glsl"));
-		m_TextureShader.reset(DarkMoon::Shader::Create("assets/shaders/texture.glsl"));
+		m_Shader = m_ShaderLibary.Load("assets/shaders/triangle.glsl");
+		m_BlueShader = m_ShaderLibary.Load("assets/shaders/square.glsl");
+		m_TextureShader = m_ShaderLibary.Load("assets/shaders/texture.glsl");
 
 		m_Texture2D = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
 		m_Texture2D1 = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
@@ -134,6 +134,7 @@ public:
 		ImGui::End();
 	}
 private:
+	DarkMoon::ShaderLibrary m_ShaderLibary;
 	DarkMoon::Ref<DarkMoon::Shader> m_Shader;
 	DarkMoon::Ref<DarkMoon::VertexArray> m_VertexArray;
 

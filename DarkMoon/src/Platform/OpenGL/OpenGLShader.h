@@ -14,11 +14,16 @@ namespace DarkMoon
 	{
 	public:
 		OpenGLShader(const std::string& filePath);
-		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
+		OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
 		virtual ~OpenGLShader();
 
 		virtual void Use() const override;
 		virtual void UnUse() const override;
+
+		virtual const std::string& GetName() const override
+		{
+			return m_Name;
+		}
 
 		void UploadUniformInt(const std::string& name, int value);
 		void UploadUniformFloat(const std::string& name, float value);
@@ -34,5 +39,6 @@ namespace DarkMoon
 		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t m_RendererID;
+		std::string m_Name;
 	};
 }

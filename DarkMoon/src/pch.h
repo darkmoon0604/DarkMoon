@@ -4,6 +4,7 @@
 #include <memory>
 #include <utility>
 #include <algorithm>
+#include <array>
 //#include <functional>
 
 #include <string>
