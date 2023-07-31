@@ -27,6 +27,16 @@ namespace DarkMoon
 		{
 			return m_Camera;
 		}
+
+		float GetZoomLevel() const
+		{
+			return m_ZoomLevel;
+		}
+
+		void SetZoomLevel(float level)
+		{
+			m_ZoomLevel = level;
+		}
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);

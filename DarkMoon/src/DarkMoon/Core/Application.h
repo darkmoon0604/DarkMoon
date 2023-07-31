@@ -34,10 +34,12 @@ namespace DarkMoon {
 		}
 	private:
 		bool OnWindowClosed(WindowClosedEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 	private:
 		Scope<Window> m_Window;
 		ImguiLayer* m_ImguiLayer;
 		bool m_isRuning = true;
+		bool m_Minimized = false;
 		LayerStack m_LayerStack;
 		float m_LastFrameTime = 0.0f;
 	private:

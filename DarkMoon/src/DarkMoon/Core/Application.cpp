@@ -32,9 +32,12 @@ namespace DarkMoon {
 			TimeStep ts = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			for (Layer* layer : m_LayerStack)
+			if (!m_Minimized)
 			{
-				layer->OnUpdate(ts);
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnUpdate(ts);
+				}
 			}
 
 			m_ImguiLayer->OnBegin();
@@ -55,6 +58,7 @@ namespace DarkMoon {
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(DM_BIND_EVENT_FUNC(Application::OnWindowClosed));
+		dispatcher.Dispatch<WindowResizeEvent>(DM_BIND_EVENT_FUNC(Application::OnWindowResize));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -80,5 +84,18 @@ namespace DarkMoon {
 	{
 		m_isRuning = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+
+		m_Minimized = false;
+		Render::OnWindowResize(e.GetWidth(), e.GetHeight());
+		return false;
 	}
 }
