@@ -18,20 +18,28 @@ namespace DarkMoon
 	{
 		if (Input::IsKeyPressed(DM_KEY_A))
 		{
-			m_CameraPosition.x += m_CameraTranslationSpeed * timeStep;
+			//m_CameraPosition.x += m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
 		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_D))
 		{
-			m_CameraPosition.x -= m_CameraTranslationSpeed * timeStep;
+			//m_CameraPosition.x -= m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
 
 		if (DarkMoon::Input::IsKeyPressed(DM_KEY_W))
 		{
-			m_CameraPosition.y -= m_CameraTranslationSpeed * timeStep;
+			//m_CameraPosition.y -= m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
 		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_S))
 		{
-			m_CameraPosition.y += m_CameraTranslationSpeed * timeStep;
+			//m_CameraPosition.y += m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
 
 		if (m_Rotation)
@@ -43,6 +51,15 @@ namespace DarkMoon
 			else if (DarkMoon::Input::IsKeyPressed(DM_KEY_E))
 			{
 				m_CameraRotation -= m_CameraRotationSpeed * timeStep;
+			}
+
+			if (m_CameraRotation > 180.0f)
+			{
+				m_CameraRotation -= 360.0f;
+			}
+			else if (m_CameraRotation <= -180.0f)
+			{
+				m_CameraRotation += 360.0f;
 			}
 
 			m_Camera.SetRotation(m_CameraRotation);
