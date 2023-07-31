@@ -11,7 +11,7 @@ class ExampleLayer : public DarkMoon::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f)
+		: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f, false)
 	{
 		float vertices[3 * 7]
 		{
