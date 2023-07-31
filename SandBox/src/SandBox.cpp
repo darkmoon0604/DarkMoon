@@ -1,4 +1,5 @@
 #include "DarkMoon.h"
+#include "DarkMoon/Core/EntryPoint.h"
 
 #include "Imgui/imgui.h"
 
@@ -6,6 +7,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "SandBox2D.h"
 
 class ExampleLayer : public DarkMoon::Layer
 {
@@ -19,7 +22,7 @@ public:
 			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
-		m_VertexArray.reset(DarkMoon::VertexArray::Create());
+		m_VertexArray = DarkMoon::VertexArray::Create();
 		DarkMoon::Ref<DarkMoon::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(DarkMoon::VertexBuffer::Create(vertices, sizeof(vertices)));
 		DarkMoon::BufferLayout layout = {
@@ -40,7 +43,7 @@ public:
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
-		m_SquareVertexArray.reset(DarkMoon::VertexArray::Create());
+		m_SquareVertexArray = DarkMoon::VertexArray::Create();
 		DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB;
 		squareVB.reset(DarkMoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
@@ -127,7 +130,8 @@ class SandBox : public DarkMoon::Application
 public:
 	SandBox()
 	{
-		PushLayer(new ExampleLayer());		
+		//PushLayer(new ExampleLayer());
+		PushLayer(new SandBox2D());
 	}
 	~SandBox()
 	{
