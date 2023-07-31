@@ -64,6 +64,7 @@ namespace DarkMoon
 		//set glfw callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
+			// window resize event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowResizeEvent e(width, height);
 			data.m_Width = width;
@@ -73,6 +74,7 @@ namespace DarkMoon
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) 
 		{
+			// window close event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowClosedEvent e;
 			data.m_CallBack(e);
@@ -80,6 +82,7 @@ namespace DarkMoon
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 		{
+			// window key event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action)
@@ -107,6 +110,7 @@ namespace DarkMoon
 
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
 		{
+			// window char event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			KeyTypedEvent e(keycode);
 			data.m_CallBack(e);
@@ -114,6 +118,7 @@ namespace DarkMoon
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) 
 		{
+			// window mouse event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			switch (action)
 			{
@@ -134,6 +139,7 @@ namespace DarkMoon
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
 		{
+			// window scroll event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			MouseScrolledEvent e((float)xOffset, (float)yOffset);
 			data.m_CallBack(e);
@@ -141,6 +147,7 @@ namespace DarkMoon
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
 		{
+			// window mouse moved event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			MouseMovedEvent e((float)xPos, (float)yPos);
 			data.m_CallBack(e);
