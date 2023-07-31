@@ -50,7 +50,7 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 {
 	m_CameraController.OnUpdate(timeStep);
 
-	DarkMoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+	DarkMoon::RenderCommand::SetClearColor(m_BackgroundColor);
 	DarkMoon::RenderCommand::Clear();
 
 	DarkMoon::Render::BeginScene(m_CameraController.GetCamera());
@@ -67,6 +67,7 @@ void SandBox2D::OnImguiRender()
 {
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Background Color", glm::value_ptr(m_BackgroundColor));
 	ImGui::End();
 }
 
