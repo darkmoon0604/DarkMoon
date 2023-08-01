@@ -49,6 +49,6 @@ namespace DarkMoon
 		virtual float IGetMousePositionY() = 0;
 		virtual std::pair<float, float> IGetMousePosition() = 0;
 	private:
-		static Input* s_Instance;
+		static Scope<Input> s_Instance;
 	};
 }
