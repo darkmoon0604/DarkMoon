@@ -15,30 +15,7 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
-	m_SquareVA = DarkMoon::VertexArray::Create();
 
-	float squareVertices[5 * 4] = 
-	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
-	};
-
-	DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB;
-	squareVB.reset(DarkMoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-	squareVB->SetLayout(
-		{
-			{ DarkMoon::ShaderDataType::Float3, "aPos" }
-		}
-	);
-	m_SquareVA->AddVertexBuffer(squareVB);
-
-	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-	DarkMoon::Ref<DarkMoon::IndexBuffer> squareIB;
-	squareIB.reset(DarkMoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-	m_SquareVA->SetIndexBuffer(squareIB);
-	m_FlatColorShader = DarkMoon::Shader::Create("assets/shaders/FlatColor.glsl");
 }
 
 void SandBox2D::OnDetach()
@@ -53,14 +30,13 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 	DarkMoon::RenderCommand::SetClearColor(m_BackgroundColor);
 	DarkMoon::RenderCommand::Clear();
 
-	DarkMoon::Render::BeginScene(m_CameraController.GetCamera());
+	DarkMoon::Render2D::BeginScene(m_CameraController.GetCamera());
 
-	std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_FlatColorShader)->Use();
-	std::dynamic_pointer_cast<DarkMoon::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("uColor", m_SquareColor);
+	auto pos = glm::vec2(0.0f, 0.0f);
+	auto size = glm::vec2(1.0f, 1.0f);
+	DarkMoon::Render2D::DrawQuad(pos, size, m_SquareColor);
 
-	DarkMoon::Render::Submit(m_FlatColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-	DarkMoon::Render::EndScene();
+	DarkMoon::Render2D::EndScene();
 }
 
 void SandBox2D::OnImguiRender()
@@ -73,5 +49,9 @@ void SandBox2D::OnImguiRender()
 
 void SandBox2D::OnEvent(DarkMoon::Event& e)
 {
+	if (e.GetEventType() == DarkMoon::EventType::KeyPressed)
+	{
+		//DM_LOG_INFO("{0}", e);
+	}
 	m_CameraController.OnEvent(e);
 }

@@ -55,7 +55,7 @@ namespace DarkMoon
 			nullptr);
 
 		
-		m_Context = CreateScope<GraphicsContext>(m_Window);
+		m_Context = CreateScope<OpenGLContext>(m_Window);
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);

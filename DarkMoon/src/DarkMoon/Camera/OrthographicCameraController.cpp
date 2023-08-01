@@ -16,30 +16,30 @@ namespace DarkMoon
 
 	void OrthographicCameraController::OnUpdate(TimeStep timeStep)
 	{
-		if (Input::IsKeyPressed(DM_KEY_A))
-		{
-			//m_CameraPosition.x += m_CameraTranslationSpeed * timeStep;
-			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
-			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
-		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_D))
+		if (DarkMoon::Input::IsKeyPressed(DM_KEY_A))
 		{
 			//m_CameraPosition.x -= m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
+		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_D))
+		{
+			//m_CameraPosition.x += m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+		}
 
 		if (DarkMoon::Input::IsKeyPressed(DM_KEY_W))
-		{
-			//m_CameraPosition.y -= m_CameraTranslationSpeed * timeStep;
-			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
-			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
-		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_S))
 		{
 			//m_CameraPosition.y += m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+		}
+		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_S))
+		{
+			//m_CameraPosition.y -= m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
+			m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
 
 		if (m_Rotation)
@@ -77,6 +77,12 @@ namespace DarkMoon
 		dispatcher.Dispatch<WindowResizeEvent>(DM_BIND_EVENT_FUNC(OrthographicCameraController::OnWindowResized));
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		m_AspectRatio = width / height;
+		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 		m_ZoomLevel -= e.GetYOffset() * 0.25f;
@@ -87,8 +93,7 @@ namespace DarkMoon
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		OnResize(e.GetWidth(), e.GetHeight());
 		return false;
 	}
 }

@@ -2,14 +2,16 @@
 #include "Render.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Render2D.h"
 
 namespace DarkMoon
 {
-	Render::SceneData* Render::s_SceneData = new Render::SceneData;
+	Scope<Render::SceneData> Render::s_SceneData = CreateScope<Render::SceneData>();
 
 	void Render::Init()
 	{
 		RenderCommand::Init();
+		Render2D::Init();
 	}
 
 	void Render::OnWindowResize(uint16_t width, uint32_t height)

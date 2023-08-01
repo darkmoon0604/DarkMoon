@@ -18,6 +18,8 @@ namespace DarkMoon
 		void OnUpdate(TimeStep timeStep);
 		void OnEvent(Event& e);
 
+		void OnResize(float width, float height);
+
 		OrthographicCamera& GetCamera()
 		{
 			return m_Camera;
