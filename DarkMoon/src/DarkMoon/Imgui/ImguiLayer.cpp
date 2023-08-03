@@ -56,12 +56,6 @@ namespace DarkMoon
 		ImGui::DestroyContext();
 	}
 
-	void ImguiLayer::OnImguiRender()
-	{
-		static bool isShow = true;
-		ImGui::ShowDemoWindow(&isShow);
-	}
-
 	void ImguiLayer::OnBegin()
 	{
 		ImGui_ImplOpenGL3_NewFrame();

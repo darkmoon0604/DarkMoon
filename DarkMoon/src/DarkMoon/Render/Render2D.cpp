@@ -78,12 +78,12 @@ namespace DarkMoon
 
 	}
 
-	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec4& color)
+	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
 
-	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, glm::vec4& color)
+	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		s_Data->TextureShader->SetFloat4("uColor", color);
 		s_Data->WhiteTexture->Bind();
@@ -94,12 +94,12 @@ namespace DarkMoon
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D>& texture)
+	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
 		DrawQuad({ position.x, position.y, 1.0f }, size, texture);
 	}
 
-	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D>& texture)
+	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
 		s_Data->TextureShader->SetFloat4("uColor", glm::vec4(1.0f));
 		texture->Bind();

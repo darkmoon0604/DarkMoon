@@ -38,9 +38,10 @@ namespace DarkMoon
 
 		glGenTextures(1, &m_ID);
 		Bind(0);
+
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
@@ -56,11 +57,12 @@ namespace DarkMoon
 		m_DataFormat = GL_RGBA;
 
 		glGenTextures(1, &m_ID);
+		Bind(0);
 
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
@@ -75,7 +77,6 @@ namespace DarkMoon
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 		DM_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture");
 		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
 	void OpenGLTexture2D::Bind(uint32_t slot /* = 0 */) const

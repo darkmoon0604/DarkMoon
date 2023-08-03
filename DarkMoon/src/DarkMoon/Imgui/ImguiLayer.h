@@ -15,7 +15,6 @@ namespace DarkMoon
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		virtual void OnImguiRender() override;
 
 		void OnBegin();
 		void OnEnd();
