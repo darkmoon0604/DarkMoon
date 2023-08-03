@@ -21,7 +21,6 @@ namespace DarkMoon
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position) * glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation), glm::vec3(0, 0, 1));
 		m_ViewMatrix = transform;//glm::inverse(transform);
-		DM_LOG_CORE_INFO("rotation {0}", m_Rotation);
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 }

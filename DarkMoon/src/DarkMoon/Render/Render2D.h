@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DarkMoon/Camera/OrthographicCamera.h"
+#include "DarkMoon/Render/Texture.h"
 
 namespace DarkMoon
 {
@@ -15,5 +16,7 @@ namespace DarkMoon
 
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, glm::vec4& color);
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, glm::vec4& color);
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D>& texture);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D>& texture);
 	};
 }

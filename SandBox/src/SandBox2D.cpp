@@ -15,7 +15,7 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
-
+	m_CheckerboardTexture = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void SandBox2D::OnDetach()
@@ -32,9 +32,9 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 
 	DarkMoon::Render2D::BeginScene(m_CameraController.GetCamera());
 
-	auto pos = glm::vec2(0.0f, 0.0f);
-	auto size = glm::vec2(1.0f, 1.0f);
-	DarkMoon::Render2D::DrawQuad(pos, size, m_SquareColor);
+	DarkMoon::Render2D::DrawQuad(glm::vec2(-1.0f, 0.0f), glm::vec2(0.8f, 0.8f), m_SquareColor);
+	DarkMoon::Render2D::DrawQuad(glm::vec2(0.5f, -0.5f), glm::vec2(0.5f, 0.75f), m_BackgroundColor);
+	DarkMoon::Render2D::DrawQuad(glm::vec3(0.0f, 0.0f, -0.1f), glm::vec2(10.0f, 10.0f), m_CheckerboardTexture);
 
 	DarkMoon::Render2D::EndScene();
 }

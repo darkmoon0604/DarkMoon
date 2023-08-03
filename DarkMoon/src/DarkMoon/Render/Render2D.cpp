@@ -15,7 +15,8 @@ namespace DarkMoon
 	struct Render2DStorage
 	{
 		Ref<VertexArray> QuadVertexArray;
-		Ref<Shader> FlatColorShader;
+		Ref<Shader> TextureShader;
+		Ref<Texture2D> WhiteTexture;
 	};
 
 	static Render2DStorage* s_Data;
@@ -27,10 +28,10 @@ namespace DarkMoon
 
 		float squareVertices[5 * 4] = 
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		Ref<VertexBuffer> squareVB;
@@ -40,6 +41,9 @@ namespace DarkMoon
 				{
 					ShaderDataType::Float3, "aPos"
 				},
+				{
+					ShaderDataType::Float2, "aTexcoord"
+				},
 			}
 		);
 		s_Data->QuadVertexArray->AddVertexBuffer(squareVB);
@@ -48,7 +52,14 @@ namespace DarkMoon
 		Ref<IndexBuffer> squareIB;
 		squareIB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
-		s_Data->FlatColorShader = Shader::Create("assets/shaders/FlatColor.glsl");
+	
+		s_Data->WhiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
+		s_Data->TextureShader = Shader::Create("assets/shaders/texture.glsl");
+		s_Data->TextureShader->Use();
+		s_Data->TextureShader->SetInt("uTexture", 0);
 	}
 
 	void Render2D::Shutdown()
@@ -58,9 +69,8 @@ namespace DarkMoon
 
 	void Render2D::BeginScene(const OrthographicCamera& camera)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->Use();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformMat4("uViewProjection", camera.GetProjectionMatrix());
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformMat4("uTransform", camera.GetViewMatrix());
+		s_Data->TextureShader->Use();
+		s_Data->TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Render2D::EndScene()
@@ -75,9 +85,28 @@ namespace DarkMoon
 
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, glm::vec4& color)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->Use();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformFloat4("uColor", color);
+		s_Data->TextureShader->SetFloat4("uColor", color);
+		s_Data->WhiteTexture->Bind();
+
+		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("uTransform", transform);
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
+
+	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<Texture2D>& texture)
+	{
+		DrawQuad({ position.x, position.y, 1.0f }, size, texture);
+	}
+
+	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<Texture2D>& texture)
+	{
+		s_Data->TextureShader->SetFloat4("uColor", glm::vec4(1.0f));
+		texture->Bind();
+		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("uTransform", transform);
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
 }
