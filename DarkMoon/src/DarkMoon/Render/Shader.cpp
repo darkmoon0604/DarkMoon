@@ -14,7 +14,7 @@ namespace DarkMoon
 			DM_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(filePath);
+			return CreateRef<OpenGLShader>(filePath);
 		case  RendererAPI::API::DirectX:
 			DM_CORE_ASSERT(false, "RendererAPI::DirectX is currently not supported!");
 			return nullptr;
@@ -32,7 +32,7 @@ namespace DarkMoon
 			DM_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(name, vertexSource, fragmentSource);
+			return CreateRef<OpenGLShader>(name, vertexSource, fragmentSource);
 		case  RendererAPI::API::DirectX:
 			DM_CORE_ASSERT(false, "RendererAPI::DirectX is currently not supported!");
 			return nullptr;

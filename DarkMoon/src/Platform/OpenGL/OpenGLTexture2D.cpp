@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "OpenGLTexture2D.h"
-#include "stb_image.h"
+#include <stb_image.h>
 
 namespace DarkMoon
 {

@@ -27,6 +27,8 @@ namespace DarkMoon
 		{
 			return s_API;
 		}
+
+		static Scope<RendererAPI> Create();
 	private:
 		static API s_API;
 	};

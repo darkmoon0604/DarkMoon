@@ -40,6 +40,6 @@ namespace DarkMoon
 
 		virtual void* GetNativeWindow() const = 0;
 
-		static Window* Create(const WindowProperty& props = WindowProperty());
+		static Scope<Window> Create(const WindowProperty& props = WindowProperty());
 	};
 }

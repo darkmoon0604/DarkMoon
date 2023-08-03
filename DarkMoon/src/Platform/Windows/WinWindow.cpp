@@ -9,16 +9,16 @@
 
 namespace DarkMoon
 {
-	static bool s_GLFWInit = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallBack(int code, const char* desc)
 	{
 		DM_LOG_CORE_ERROR("GLFW Error {0}{1}", code, desc);
 	}
 
-	Window* Window::Create(const WindowProperty& props)
+	Scope<Window> Window::Create(const WindowProperty& props)
 	{
-		return new WinWindow(props);
+		return CreateScope<WinWindow>(props);
 	}
 
 	WinWindow::WinWindow(const WindowProperty& props)
@@ -39,12 +39,11 @@ namespace DarkMoon
 
 		DM_LOG_CORE_INFO("Create window {0} ({1}, {2})", m_Data.m_Title, m_Data.m_Width, m_Data.m_Height);
 
-		if (!s_GLFWInit)
+		if (s_GLFWWindowCount == 0)
 		{
 			int success = glfwInit();
 			DM_CORE_ASSERT(success, "Cound not intialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
-			s_GLFWInit = true;
 		}
 
 		m_Window = glfwCreateWindow(
@@ -54,8 +53,9 @@ namespace DarkMoon
 			nullptr,
 			nullptr);
 
+		++s_GLFWWindowCount;
 		
-		m_Context = CreateScope<OpenGLContext>(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -157,7 +157,11 @@ namespace DarkMoon
 	void WinWindow::ShutDown()
 	{
 		glfwDestroyWindow(m_Window);
-		m_Window = nullptr;
+		--s_GLFWWindowCount;
+		if (s_GLFWWindowCount == 0)
+		{
+			glfwTerminate();
+		}
 	}
 
 	void WinWindow::OnUpdate()

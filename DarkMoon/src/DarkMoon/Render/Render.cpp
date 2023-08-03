@@ -32,8 +32,8 @@ namespace DarkMoon
 	void Render::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Use();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("uViewProjection", s_SceneData->m_ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("uTransform", transform);
+		shader->SetMat4("uViewProjection", s_SceneData->m_ViewProjectionMatrix);
+		shader->SetMat4("uTransform", transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}
