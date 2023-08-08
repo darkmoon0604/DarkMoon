@@ -34,4 +34,9 @@ namespace DarkMoon
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
+	void OpenGLRendererAPI::DrawArrays(unsigned int count)
+	{
+		glDrawArrays(GL_TRIANGLES, 0, count);
+	}
 }

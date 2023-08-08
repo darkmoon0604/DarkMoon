@@ -32,6 +32,11 @@ namespace DarkMoon
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
+
+		inline static void DrawArrays(unsigned int count)
+		{
+			s_RendererAPI->DrawArrays(count);
+		}
 	private:
 		static Scope<RendererAPI> s_RendererAPI;
 	};

@@ -24,6 +24,11 @@ namespace DarkMoon
 		s_SceneData->m_ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
+	void Render::BeginScene(PerspectiveCamera& camera)
+	{
+		s_SceneData->m_ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+	}
+
 	void Render::EndScene()
 	{
 
@@ -37,4 +42,14 @@ namespace DarkMoon
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 	}
+
+	void Render::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, unsigned int count, const glm::mat4& transform /*= glm::mat4(1.0f)*/)
+	{
+		shader->Use();
+		shader->SetMat4("uViewProjection", s_SceneData->m_ViewProjectionMatrix);
+		shader->SetMat4("uTransform", transform);
+		vertexArray->Bind();
+		RenderCommand::DrawArrays(count);
+	}
+
 }

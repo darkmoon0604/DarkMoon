@@ -24,6 +24,8 @@
 
 #include "DarkMoon/Camera/OrthographicCamera.h"
 #include "DarkMoon/Camera/OrthographicCameraController.h"
+#include "DarkMoon/Camera/PerspectiveCamera.h"
+#include "DarkMoon/Camera/PerspectiveCameraController.h"
 
 // ENTRY POINT
 //#include "DarkMoon/Core/EntryPoint.h"

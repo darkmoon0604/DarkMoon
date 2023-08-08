@@ -1,10 +1,8 @@
 #pragma once
 
 #include "OrthographicCamera.h"
-
 #include "DarkMoon/Core/Core.h"
 #include "DarkMoon/Core/TimeStep.h"
-
 #include "DarkMoon/Events/ApplicationEvent.h"
 #include "DarkMoon/Events/MouseEvent.h"
 

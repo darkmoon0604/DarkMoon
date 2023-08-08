@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SandBox2D.h"
+#include "SandBox3D.h"
 
 class ExampleLayer : public DarkMoon::Layer
 {
@@ -131,7 +132,8 @@ public:
 	SandBox()
 	{
 		//PushLayer(new ExampleLayer());
-		PushLayer(new SandBox2D());
+		//PushLayer(new SandBox2D());
+		PushLayer(new SandBox3D());
 	}
 	~SandBox()
 	{
