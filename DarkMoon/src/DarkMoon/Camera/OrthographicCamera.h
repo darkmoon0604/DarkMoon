@@ -1,19 +1,20 @@
 #pragma once
 
 #include "DarkMoon/Core/Core.h"
-
-#include <glm/glm.hpp>
+#include "DarkMoon/Render/Camera.h"
 
 namespace DarkMoon
 {
-	class DARKMOON_API OrthographicCamera
+	class OrthographicCamera : public Camera
 	{
 	public:
+		OrthographicCamera() {}
+
 		OrthographicCamera(float left, float right, float bottom, float top);
 
 		void SetProjection(float left, float right, float bottom, float top);
 
-		const glm::vec3& GetPosition() const
+		virtual const glm::vec3& GetPosition() const override
 		{
 			return m_Position;
 		}
@@ -35,17 +36,17 @@ namespace DarkMoon
 			RecalculateViewMatrix();
 		}
 
-		const glm::mat4& GetProjectionMatrix() const
+		virtual const glm::mat4& GetProjectionMatrix() const override
 		{
 			return m_ProjectionMatrix;
 		}
 
-		const glm::mat4& GetViewMatrix() const
+		virtual const glm::mat4& GetViewMatrix() const override
 		{
 			return m_ViewMatrix;
 		}
 
-		const glm::mat4& GetViewProjectionMatrix() const
+		virtual const glm::mat4& GetViewProjectionMatrix() const override
 		{
 			return m_ViewProjectionMatrix;
 		}

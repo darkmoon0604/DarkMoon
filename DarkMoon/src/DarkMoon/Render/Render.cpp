@@ -19,12 +19,7 @@ namespace DarkMoon
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Render::BeginScene(OrthographicCamera& camera)
-	{
-		s_SceneData->m_ViewProjectionMatrix = camera.GetViewProjectionMatrix();
-	}
-
-	void Render::BeginScene(PerspectiveCamera& camera)
+	void Render::BeginScene(Camera& camera)
 	{
 		s_SceneData->m_ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}

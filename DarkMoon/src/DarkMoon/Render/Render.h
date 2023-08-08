@@ -13,8 +13,7 @@ namespace DarkMoon
 	public:
 		static void Init();
 		static void OnWindowResize(uint16_t width, uint32_t height);
-		static void BeginScene(OrthographicCamera& camera);
-		static void BeginScene(PerspectiveCamera& camera);
+		static void BeginScene(Camera& camera);
 		static void EndScene();
 
 		static void Submit(const Ref<Shader>& shader, 

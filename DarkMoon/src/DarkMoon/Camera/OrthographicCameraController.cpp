@@ -93,7 +93,7 @@ namespace DarkMoon
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
-		OnResize(e.GetWidth(), e.GetHeight());
+		OnResize(static_cast<float>(e.GetWidth()), static_cast<float>(e.GetHeight()));
 		return false;
 	}
 }
