@@ -37,6 +37,8 @@ namespace DarkMoon
 		virtual void SetEventCallBack(const EventCallBackFunc& callback) = 0;
 		virtual void SetVSync(bool isEnabled) = 0;
 		virtual bool IsVSync() const = 0;
+		virtual void OnClosed() = 0;
+		virtual void IsShowCursor(bool isShow) = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 

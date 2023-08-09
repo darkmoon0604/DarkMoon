@@ -131,9 +131,10 @@ class SandBox : public DarkMoon::Application
 public:
 	SandBox()
 	{
+		GetWindow().IsShowCursor(true);
 		//PushLayer(new ExampleLayer());
-		PushLayer(new SandBox2D());
-		//PushLayer(new SandBox3D());
+		//PushLayer(new SandBox2D());
+		PushLayer(new SandBox3D());
 	}
 	~SandBox()
 	{

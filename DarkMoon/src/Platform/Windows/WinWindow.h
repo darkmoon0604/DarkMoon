@@ -38,6 +38,8 @@ namespace DarkMoon
 
 		void SetVSync(bool isEnabled) override;
 		bool IsVSync() const override;
+		void OnClosed() override;
+		void IsShowCursor(bool isShow) override;
 	private:
 		virtual void Init(const WindowProperty& props);
 		virtual void ShutDown();

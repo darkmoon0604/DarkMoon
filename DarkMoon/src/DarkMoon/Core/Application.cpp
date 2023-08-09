@@ -2,6 +2,8 @@
 
 #include "Application.h"
 #include "DarkMoon/Render/Render.h"
+#include "DarkMoon/Core/Input.h"
+#include "DarkMoon/Core/KeyCodes.h"
 
 #include <GLFW/glfw3.h>
 
@@ -28,6 +30,13 @@ namespace DarkMoon {
 	{
 		while (m_isRuning)
 		{
+			if (Input::IsKeyPressed(DM_KEY_ESCAPE))
+			{
+				m_isRuning = false;
+				m_Window->OnClosed();
+				return;
+			}
+
 			float time = (float)glfwGetTime();
 			TimeStep ts = time - m_LastFrameTime;
 			m_LastFrameTime = time;

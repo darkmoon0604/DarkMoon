@@ -61,6 +61,10 @@ namespace DarkMoon
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(false);
 
+		// tell GLFW to capture our mouse
+		//glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetCursorPos(m_Window, m_Data.m_Width / 2.0f, m_Data.m_Height / 2.0f);
+
 		//set glfw callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
@@ -156,11 +160,14 @@ namespace DarkMoon
 
 	void WinWindow::ShutDown()
 	{
+		if (m_Window == nullptr)
+			return;
 		glfwDestroyWindow(m_Window);
 		--s_GLFWWindowCount;
 		if (s_GLFWWindowCount == 0)
 		{
 			glfwTerminate();
+			m_Window = nullptr;
 		}
 	}
 
@@ -179,5 +186,15 @@ namespace DarkMoon
 	bool WinWindow::IsVSync() const
 	{
 		return m_Data.m_IsVSync;
+	}
+
+	void WinWindow::OnClosed()
+	{
+		ShutDown();
+	}
+
+	void WinWindow::IsShowCursor(bool isShow)
+	{
+		glfwSetInputMode(m_Window, GLFW_CURSOR, isShow ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 	}
 }

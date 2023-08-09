@@ -10,7 +10,7 @@ namespace DarkMoon
 	float m_LastPosX, m_LastPosY;
 
 	PerspectiveCameraController::PerspectiveCameraController(float width, float height, float fov /*= 45.0f*/, float cameraNear /*= 0.1f*/, float cameraFar /*= 100.0f*/)
-		: m_Camera(width / height, fov, cameraNear, cameraFar), m_AspectRatio(width / height), m_Fov(fov), m_CameraNear(cameraNear), m_CameraFar(cameraFar), m_MovementSpeed(2.5f), m_MouseSensitivity(0.01f)
+		: m_Camera(width / height, fov, cameraNear, cameraFar), m_AspectRatio(width / height), m_Fov(fov), m_CameraNear(cameraNear), m_CameraFar(cameraFar), m_MovementSpeed(2.5f), m_MouseSensitivity(0.1f)
 	{
 		m_LastPosX = width / 2.0f;
 		m_LastPosY = height / 2.0f;
@@ -64,8 +64,11 @@ namespace DarkMoon
 			m_LastPosY = e.GetY();
 			m_IsFirstMouse = false;
 		}
-		float xOffset = (m_LastPosX - e.GetX()) * m_MouseSensitivity;
-		float yOffset = (e.GetY() - m_LastPosY) * m_MouseSensitivity;
+		float xOffset = m_LastPosX - e.GetX();
+		float yOffset = e.GetY() - m_LastPosY;
+
+		xOffset *= m_MouseSensitivity;
+		yOffset *= m_MouseSensitivity;
 
 		m_LastPosX = e.GetX();
 		m_LastPosY = e.GetY();
