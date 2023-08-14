@@ -5,7 +5,7 @@
 
 namespace DarkMoon
 {
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+	DarkMoon::Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Render::GetAPI())
 		{
@@ -13,7 +13,7 @@ namespace DarkMoon
 			DM_CORE_ASSERT(false, "None is not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexBuffer(vertices, size);
+			return DarkMoon::CreateRef<OpenGLVertexBuffer>(vertices, size);
 		case RendererAPI::API::DirectX:
 			DM_CORE_ASSERT(false, "DirectX is not supported!");
 			return nullptr;

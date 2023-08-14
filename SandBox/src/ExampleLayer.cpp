@@ -7,26 +7,23 @@
 ExampleLayer::ExampleLayer()
 	: Layer("Example Layer"), m_CameraController(1280.0f / 720.0f, false)
 {
-	float vertices[3 * 7]
-	{
+	m_VertexArray = DarkMoon::VertexArray::Create();
+	float vertices[3 * 7] = {
 		-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 		 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 		 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 	};
-	m_VertexArray = DarkMoon::VertexArray::Create();
-	DarkMoon::Ref<DarkMoon::VertexBuffer> vertexBuffer;
-	vertexBuffer.reset(DarkMoon::VertexBuffer::Create(vertices, sizeof(vertices)));
+	DarkMoon::Ref<DarkMoon::VertexBuffer> vertexBuffer = DarkMoon::VertexBuffer::Create(vertices, sizeof(vertices));
 	DarkMoon::BufferLayout layout = {
-		{ DarkMoon::ShaderDataType::Float3, "aPos" },
-		{ DarkMoon::ShaderDataType::Float4, "aColor" }
+		{ DarkMoon::ShaderDataType::Float3, "a_Position" },
+		{ DarkMoon::ShaderDataType::Float4, "a_Color" }
 	};
 	vertexBuffer->SetLayout(layout);
 	m_VertexArray->AddVertexBuffer(vertexBuffer);
-
-	unsigned int indices[] = { 0, 1, 2 };
-	DarkMoon::Ref<DarkMoon::IndexBuffer> indexBuffer;
-	indexBuffer.reset(DarkMoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+	uint32_t indices[3] = { 0, 1, 2 };
+	DarkMoon::Ref<DarkMoon::IndexBuffer> indexBuffer = DarkMoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 	m_VertexArray->SetIndexBuffer(indexBuffer);
+	m_SquareVertexArray = DarkMoon::VertexArray::Create();
 
 	float squareVertices[5 * 4] = {
 		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
@@ -34,46 +31,42 @@ ExampleLayer::ExampleLayer()
 		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 	};
-	m_SquareVertexArray = DarkMoon::VertexArray::Create();
-	DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB;
-	squareVB.reset(DarkMoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+	DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB = DarkMoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 	squareVB->SetLayout({
-		{ DarkMoon::ShaderDataType::Float3, "aPos" },
-		{ DarkMoon::ShaderDataType::Float2, "aTexcoord" },
+		{ DarkMoon::ShaderDataType::Float3, "a_Position" },
+		{ DarkMoon::ShaderDataType::Float2, "a_TexCoord" }
 		});
 	m_SquareVertexArray->AddVertexBuffer(squareVB);
-
-	unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-	DarkMoon::Ref<DarkMoon::IndexBuffer> squareIB;
-	squareIB.reset(DarkMoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
+	uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
+	DarkMoon::Ref<DarkMoon::IndexBuffer> squareIB = DarkMoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 	m_SquareVertexArray->SetIndexBuffer(squareIB);
 
 	std::string vertexSrc = R"(
 			#version 330 core
 			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			out vec3 v_Position;
-			out vec4 v_Color;
+			layout(location = 0) in vec3 aPosition;
+			layout(location = 1) in vec4 aColor;
+			uniform mat4 uViewProjection;
+			uniform mat4 uTransform;
+			out vec3 vPosition;
+			out vec4 vColor;
 			void main()
 			{
-				v_Position = a_Position;
-				v_Color = a_Color;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+				vPosition = aPosition;
+				vColor = aColor;
+				gl_Position = uViewProjection * uTransform * vec4(aPosition, 1.0);	
 			}
 		)";
 	std::string fragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
-			in vec4 v_Color;
+			in vec3 vPosition;
+			in vec4 vColor;
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
-				color = v_Color;
+				color = vec4(vPosition * 0.5 + 0.5, 1.0);
+				color = vColor;
 			}
 		)";
 	m_Shader = DarkMoon::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
@@ -81,14 +74,14 @@ ExampleLayer::ExampleLayer()
 	std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
 			
-			layout(location = 0) in vec3 a_Position;
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			out vec3 v_Position;
+			layout(location = 0) in vec3 aPosition;
+			uniform mat4 uViewProjection;
+			uniform mat4 uTransform;
+			out vec3 vPosition;
 			void main()
 			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+				vPosition = aPosition;
+				gl_Position = uViewProjection * uTransform * vec4(aPosition, 1.0);	
 			}
 		)";
 
@@ -96,19 +89,19 @@ ExampleLayer::ExampleLayer()
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
-			in vec3 v_Position;
+			in vec3 vPosition;
 			
-			uniform vec3 u_Color;
+			uniform vec3 uColor;
 			void main()
 			{
-				color = vec4(u_Color, 1.0);
+				color = vec4(uColor, 1.0);
 			}
 		)";
 
 	m_FlatColorShader = DarkMoon::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 	auto textureShader = m_ShaderLibrary.Load("assets/shaders/texture.glsl");
 	m_Texture = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
-	m_LogoTexture = DarkMoon::Texture2D::Create("assets/textures/ChernoLogo.png");
+	m_LogoTexture = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
 	textureShader->Use();
 	textureShader->SetInt("u_Texture", 0);
 }
@@ -133,7 +126,7 @@ void ExampleLayer::OnUpdate(DarkMoon::TimeStep timeStep)
 	DarkMoon::Render::BeginScene(m_CameraController.GetCamera());
 	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 	m_FlatColorShader->Use();
-	m_FlatColorShader->SetFloat3("u_Color", m_SquareColor);
+	m_FlatColorShader->SetFloat3("uColor", m_SquareColor);
 	for (int y = 0; y < 20; y++)
 	{
 		for (int x = 0; x < 20; x++)
@@ -143,7 +136,7 @@ void ExampleLayer::OnUpdate(DarkMoon::TimeStep timeStep)
 			DarkMoon::Render::Submit(m_FlatColorShader, m_SquareVertexArray, transform);
 		}
 	}
-	auto textureShader = m_ShaderLibrary.Get("Texture");
+	auto textureShader = m_ShaderLibrary.Get("texture");
 	m_Texture->Bind();
 	DarkMoon::Render::Submit(textureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 	m_LogoTexture->Bind();

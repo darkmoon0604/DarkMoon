@@ -62,8 +62,7 @@ void SandBox3D::OnAttach()
 		-0.5f,  0.5f, -0.5f,
 	};
 
-	DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB;
-	squareVB.reset(DarkMoon::VertexBuffer::Create(vertices, sizeof(vertices)));
+	DarkMoon::Ref<DarkMoon::VertexBuffer> squareVB = DarkMoon::VertexBuffer::Create(vertices, sizeof(vertices));
 	squareVB->SetLayout(
 		{
 			{ DarkMoon::ShaderDataType::Float3, "aPos" }

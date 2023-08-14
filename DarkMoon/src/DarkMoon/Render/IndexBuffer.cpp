@@ -5,7 +5,7 @@
 
 namespace DarkMoon
 {
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		switch (Render::GetAPI())
 		{
@@ -13,7 +13,7 @@ namespace DarkMoon
 			DM_CORE_ASSERT(false, "None is not supported!");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLIndexBuffer(indices, count);
+			return CreateRef<OpenGLIndexBuffer>(indices, count);
 		case RendererAPI::API::DirectX:
 			DM_CORE_ASSERT(false, "DirectX is not supported!");
 			return nullptr;
