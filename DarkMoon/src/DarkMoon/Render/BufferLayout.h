@@ -57,7 +57,7 @@ namespace DarkMoon
 		std::string m_Name;
 		ShaderDataType m_Type;
 		uint32_t m_Size;
-		uint32_t m_Offset;
+		size_t m_Offset;
 		bool m_Normalized;
 
 		BufferElement() = default;
@@ -144,7 +144,7 @@ namespace DarkMoon
 	private:
 		void CalculateOffsetAndStride()
 		{
-			uint32_t offset = 0;
+			size_t offset = 0;
 			m_Stride = 0;
 			for (auto& element : m_Elements)
 			{

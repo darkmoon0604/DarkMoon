@@ -41,6 +41,7 @@ namespace DarkMoon
 
 		if (s_GLFWWindowCount == 0)
 		{
+			DM_LOG_CORE_INFO("Initializing GLFW!");
 			int success = glfwInit();
 			DM_CORE_ASSERT(success, "Cound not intialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
