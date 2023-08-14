@@ -18,6 +18,7 @@ namespace DarkMoon
 
 	void PerspectiveCameraController::OnUpdate(TimeStep timeStep)
 	{
+		DM_PROFILE_FUNCTION();
 		float velocity = m_MovementSpeed * timeStep;
 		if (DarkMoon::Input::IsKeyPressed(DM_KEY_A))
 		{
@@ -44,6 +45,7 @@ namespace DarkMoon
 
 	void PerspectiveCameraController::OnEvent(Event& e)
 	{
+		DM_PROFILE_FUNCTION();
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseMovedEvent>(DM_BIND_EVENT_FUNC(PerspectiveCameraController::OnMouseMoved));
 		dispatcher.Dispatch<MouseScrolledEvent>(DM_BIND_EVENT_FUNC(PerspectiveCameraController::OnMouseScrolled));
@@ -58,6 +60,7 @@ namespace DarkMoon
 
 	bool PerspectiveCameraController::OnMouseMoved(MouseMovedEvent& e)
 	{
+		DM_PROFILE_FUNCTION();
 		if (m_IsFirstMouse)
 		{
 			m_LastPosX = e.GetX();
@@ -85,6 +88,7 @@ namespace DarkMoon
 
 	bool PerspectiveCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		DM_PROFILE_FUNCTION();
 		m_Fov -= e.GetYOffset();
 		if (m_Fov < 1.0f) m_Fov = 1.0f;
 		if (m_Fov > 90.0f) m_Fov = 90.0f;
@@ -94,6 +98,7 @@ namespace DarkMoon
 
 	bool PerspectiveCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		DM_PROFILE_FUNCTION();
 		OnResize(static_cast<float>(e.GetWidth()), static_cast<float>(e.GetHeight()));
 		return false;
 	}

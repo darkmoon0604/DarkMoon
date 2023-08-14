@@ -12,6 +12,7 @@ namespace DarkMoon
 	{
 	public:
 		static void Init();
+		static void Shutdown();
 		static void OnWindowResize(uint16_t width, uint32_t height);
 		static void BeginScene(Camera& camera);
 		static void EndScene();

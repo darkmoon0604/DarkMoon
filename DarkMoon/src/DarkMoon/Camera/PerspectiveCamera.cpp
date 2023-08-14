@@ -15,16 +15,19 @@ namespace DarkMoon
 		  m_Yaw(-90.f),
 		  m_Pitch(0.0f)
 	{
+		DM_PROFILE_FUNCTION();
 		UpdateCameraVectors();
 	}
 
 	void PerspectiveCamera::SetProjection(float aspectRatio, float fov, float cameraNear, float cameraFar)
 	{
+		DM_PROFILE_FUNCTION();
 		m_ProjectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, cameraNear, cameraFar);
 	}
 
 	void PerspectiveCamera::UpdateCameraVectors()
 	{
+		DM_PROFILE_FUNCTION();
 		glm::vec3 front;
 		front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 		front.y = sin(glm::radians(m_Pitch));

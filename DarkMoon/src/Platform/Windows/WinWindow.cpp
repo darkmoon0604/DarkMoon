@@ -23,16 +23,19 @@ namespace DarkMoon
 
 	WinWindow::WinWindow(const WindowProperty& props)
 	{
+		DM_PROFILE_FUNCTION();
 		Init(props);
 	}
 
 	WinWindow::~WinWindow()
 	{
+		DM_PROFILE_FUNCTION();
 		ShutDown();
 	}
 
 	void WinWindow::Init(const WindowProperty& props)
 	{
+		DM_PROFILE_FUNCTION();
 		m_Data.m_Title = props.m_Title;
 		m_Data.m_Width = props.m_Width;
 		m_Data.m_Height = props.m_Height;
@@ -41,20 +44,24 @@ namespace DarkMoon
 
 		if (s_GLFWWindowCount == 0)
 		{
+			DM_PROFILE_SCOPE("glfw init");
 			DM_LOG_CORE_INFO("Initializing GLFW!");
 			int success = glfwInit();
 			DM_CORE_ASSERT(success, "Cound not intialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
 		}
 
-		m_Window = glfwCreateWindow(
-			(int)m_Data.m_Width,
-			(int)m_Data.m_Height,
-			m_Data.m_Title.c_str(),
-			nullptr,
-			nullptr);
+		{
+			DM_PROFILE_SCOPE("glfw create window");
+			m_Window = glfwCreateWindow(
+				(int)m_Data.m_Width,
+				(int)m_Data.m_Height,
+				m_Data.m_Title.c_str(),
+				nullptr,
+				nullptr);
 
-		++s_GLFWWindowCount;
+			++s_GLFWWindowCount;
+		}
 		
 		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
@@ -161,6 +168,7 @@ namespace DarkMoon
 
 	void WinWindow::ShutDown()
 	{
+		DM_PROFILE_FUNCTION();
 		if (m_Window == nullptr)
 			return;
 		glfwDestroyWindow(m_Window);
@@ -174,12 +182,14 @@ namespace DarkMoon
 
 	void WinWindow::OnUpdate()
 	{
+		DM_PROFILE_FUNCTION();
 		m_Context->SwapBuffer();
 		glfwPollEvents();
 	}
 
 	void WinWindow::SetVSync(bool isEnabled)
 	{
+		DM_PROFILE_FUNCTION();
 		glfwSwapInterval(isEnabled ? 1 : 0);
 		m_Data.m_IsVSync = isEnabled;
 	}

@@ -15,6 +15,7 @@
 #include <unordered_set>
 
 #include "DarkMoon/Core/Log.h"
+#include "DarkMoon/Debug/Instrumentor.h"
 
 #ifdef DM_PLATFORM_WINDOWS
 #include <Windows.h>

@@ -10,8 +10,14 @@ namespace DarkMoon
 
 	void Render::Init()
 	{
+		DM_PROFILE_FUNCTION();
 		RenderCommand::Init();
 		Render2D::Init();
+	}
+
+	void Render::Shutdown()
+	{
+		Render2D::Shutdown();
 	}
 
 	void Render::OnWindowResize(uint16_t width, uint32_t height)

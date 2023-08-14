@@ -23,6 +23,7 @@ namespace DarkMoon
 
 	void Render2D::Init()
 	{
+		DM_PROFILE_FUNCTION();
 		s_Data = new Render2DStorage();
 		s_Data->QuadVertexArray = VertexArray::Create();
 
@@ -64,18 +65,20 @@ namespace DarkMoon
 
 	void Render2D::Shutdown()
 	{
+		DM_PROFILE_FUNCTION();
 		delete s_Data;
 	}
 
 	void Render2D::BeginScene(const OrthographicCamera& camera)
 	{
+		DM_PROFILE_FUNCTION();
 		s_Data->TextureShader->Use();
 		s_Data->TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Render2D::EndScene()
 	{
-
+		DM_PROFILE_FUNCTION();
 	}
 
 	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -85,6 +88,7 @@ namespace DarkMoon
 
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
+		DM_PROFILE_FUNCTION();
 		s_Data->TextureShader->SetFloat4("uColor", color);
 		s_Data->WhiteTexture->Bind();
 
@@ -101,6 +105,7 @@ namespace DarkMoon
 
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
+		DM_PROFILE_FUNCTION();
 		s_Data->TextureShader->SetFloat4("uColor", glm::vec4(1.0f));
 		texture->Bind();
 		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });

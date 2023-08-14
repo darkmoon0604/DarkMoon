@@ -15,6 +15,7 @@ namespace DarkMoon
 
 	void OpenGLContext::Init()
 	{
+		DM_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		DM_CORE_ASSERT(status, "Initialize glad failed!");
@@ -26,6 +27,7 @@ namespace DarkMoon
 
 	void OpenGLContext::SwapBuffer()
 	{
+		DM_PROFILE_FUNCTION();
 		glfwSwapBuffers(m_Window);
 	}
 }

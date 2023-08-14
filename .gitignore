@@ -9,4 +9,5 @@ bin-tmp/
 *.sln
 *.vcxproj
 *.filters
+*.json
 SandBox/imgui.ini

@@ -17,6 +17,7 @@ namespace DarkMoon
 
 	void ImguiLayer::OnAttach()
 	{
+		DM_PROFILE_FUNCTION();
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -51,6 +52,7 @@ namespace DarkMoon
 
 	void ImguiLayer::OnDetach()
 	{
+		DM_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -58,6 +60,7 @@ namespace DarkMoon
 
 	void ImguiLayer::OnBegin()
 	{
+		DM_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -65,6 +68,7 @@ namespace DarkMoon
 
 	void ImguiLayer::OnEnd()
 	{	
+		DM_PROFILE_FUNCTION();
 		Application& app = Application::Get();
 
 		ImGuiIO& io = ImGui::GetIO();

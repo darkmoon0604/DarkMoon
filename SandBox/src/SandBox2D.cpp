@@ -53,31 +53,29 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
+	DM_PROFILE_FUNCTION();
 	m_CheckerboardTexture = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void SandBox2D::OnDetach()
 {
-
+	DM_PROFILE_FUNCTION();
 }
 
 void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 {
-	PROFILE_SCOPE("SandBox2D::OnUpdate");
+	DM_PROFILE_FUNCTION();
+
+	m_CameraController.OnUpdate(timeStep);
 
 	{
-		PROFILE_SCOPE("CameraController::OnUpdate");
-		m_CameraController.OnUpdate(timeStep);
-	}
-
-	{
-		PROFILE_SCOPE("Renderer Prep");
+		DM_PROFILE_SCOPE("Renderer Prep");
 		DarkMoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		DarkMoon::RenderCommand::Clear();
 	}
 
 	{
-		PROFILE_SCOPE("Renderer Draw");
+		DM_PROFILE_SCOPE("Renderer Draw");
 		DarkMoon::Render2D::BeginScene(m_CameraController.GetCamera());
 
 		DarkMoon::Render2D::DrawQuad(glm::vec2(m_PosX, m_PosY), { m_SizeX, m_SizeY }, m_SquareColor);
@@ -90,6 +88,8 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 
 void SandBox2D::OnImguiRender()
 {
+	DM_PROFILE_FUNCTION();
+
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 	ImGui::ColorEdit4("Background Color", glm::value_ptr(m_BackgroundColor));
@@ -97,15 +97,6 @@ void SandBox2D::OnImguiRender()
 	ImGui::SliderFloat("Square SizeY", &m_SizeY, 0.1f, 1.0f);
 	ImGui::SliderFloat("Square PosX", &m_PosX, -1.0f, 1.0f);
 	ImGui::SliderFloat("Square PosY", &m_PosY, -1.0f, 1.0f);
-
-	for (auto& result : m_ProfileResults)
-	{
-		char label[50];
-		strcpy(label, "%.3fms");
-		strcat(label, result.Name);
-		ImGui::Text(label, result.Time);
-	}
-	m_ProfileResults.clear();
 
 	ImGui::End();
 }

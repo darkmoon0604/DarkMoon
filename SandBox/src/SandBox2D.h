@@ -20,14 +20,6 @@ private:
 	DarkMoon::Ref<DarkMoon::Shader> m_FlatColorShader;
 	DarkMoon::Ref<DarkMoon::Texture2D> m_CheckerboardTexture;
 
-	struct ProfileResult
-	{
-		const char* Name;
-		float Time;
-	};
-
-	std::vector<ProfileResult> m_ProfileResults;
-
 	glm::vec4 m_SquareColor = { 0.9f, 0.3f, 0.8f, 1.0f };
 	glm::vec4 m_BackgroundColor = { 0.1f, 0.1f, 0.1f, 1.0f };
 	float m_SizeX = 0.2f, m_SizeY = 0.1f;

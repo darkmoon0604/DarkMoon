@@ -7,6 +7,7 @@ namespace DarkMoon
 {
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path(path)
 	{
+		DM_PROFILE_FUNCTION();
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(true);
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
@@ -53,6 +54,7 @@ namespace DarkMoon
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) 
 		: m_Width(width), m_Height(height)
 	{
+		DM_PROFILE_FUNCTION();
 		m_InternalFormat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
 
@@ -68,12 +70,14 @@ namespace DarkMoon
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		DM_PROFILE_FUNCTION();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glDeleteTextures(1, &m_ID);
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		DM_PROFILE_FUNCTION();
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 		DM_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture");
 		glTexImage2D(GL_TEXTURE_2D, 0, m_InternalFormat, m_Width, m_Height, 0, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -81,6 +85,7 @@ namespace DarkMoon
 
 	void OpenGLTexture2D::Bind(uint32_t slot /* = 0 */) const
 	{
+		DM_PROFILE_FUNCTION();
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
 }
