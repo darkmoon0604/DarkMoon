@@ -103,7 +103,7 @@ ExampleLayer::ExampleLayer()
 	m_Texture = DarkMoon::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_LogoTexture = DarkMoon::Texture2D::Create("assets/textures/awesomeface.png");
 	textureShader->Use();
-	textureShader->SetInt("u_Texture", 0);
+	textureShader->SetInt("aTexcoord", 0);
 }
 
 void ExampleLayer::OnAttach()
