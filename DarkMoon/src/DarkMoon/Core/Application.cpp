@@ -41,7 +41,7 @@ namespace DarkMoon {
 		while (m_isRuning)
 		{
 			DM_PROFILE_SCOPE("RunLoop");
-			if (Input::IsKeyPressed(DM_KEY_ESCAPE))
+			if (Input::IsKeyPressed(Key::Escape))
 			{
 				m_isRuning = false;
 				m_Window->OnClosed();
@@ -88,13 +88,13 @@ namespace DarkMoon {
 		dispatcher.Dispatch<WindowClosedEvent>(DM_BIND_EVENT_FUNC(Application::OnWindowClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(DM_BIND_EVENT_FUNC(Application::OnWindowResize));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
-			(*--it)->OnEvent(e);
 			if (e.IsHandled())
 			{
 				break;
 			}
+			(*it)->OnEvent(e);
 		}
 	}
 

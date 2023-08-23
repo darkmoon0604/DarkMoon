@@ -1,6 +1,8 @@
 #pragma once
 
 #include "DarkMoon/Core/Core.h"
+#include "DarkMoon/Core/KeyCodes.h"
+#include "DarkMoon/Core/MouseCodes.h"
 
 namespace DarkMoon
 {
@@ -12,12 +14,12 @@ namespace DarkMoon
 		Input(const Input&) = delete;
 		Input& operator=(const Input&) = delete;
 
-		inline static bool IsKeyPressed(int keyCode)
+		inline static bool IsKeyPressed(KeyCode keyCode)
 		{
 			return s_Instance->IIsKeyPressed(keyCode);
 		}
 
-		inline static bool IsMouseButtonPressed(int button)
+		inline static bool IsMouseButtonPressed(MouseCode button)
 		{
 			return s_Instance->IIsMouseButtonPressed(button);
 		}
@@ -42,9 +44,9 @@ namespace DarkMoon
 		/// </summary>
 		/// <param name="keyCode"></param>
 		/// <returns></returns>
-		virtual bool IIsKeyPressed(int keyCode) = 0;
+		virtual bool IIsKeyPressed(KeyCode keyCode) = 0;
 
-		virtual bool IIsMouseButtonPressed(int button) = 0;
+		virtual bool IIsMouseButtonPressed(MouseCode button) = 0;
 		virtual float IGetMousePositionX() = 0;
 		virtual float IGetMousePositionY() = 0;
 		virtual std::pair<float, float> IGetMousePosition() = 0;

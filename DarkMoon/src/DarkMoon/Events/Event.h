@@ -25,7 +25,7 @@ namespace DarkMoon
 		Applicaction = BIT(0),
 		InputBoard = BIT(1),
 		Keyboard = BIT(2),
-		Mouse = BIT(3),
+		EventCategoryMouse = BIT(3),
 		MouseButton = BIT(4),
 	};
 

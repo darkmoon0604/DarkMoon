@@ -17,26 +17,26 @@ namespace DarkMoon
 	void OrthographicCameraController::OnUpdate(TimeStep timeStep)
 	{
 		DM_PROFILE_FUNCTION();
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_A))
+		if (DarkMoon::Input::IsKeyPressed(Key::A))
 		{
 			//m_CameraPosition.x -= m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_D))
+		else if (DarkMoon::Input::IsKeyPressed(Key::D))
 		{
 			//m_CameraPosition.x += m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
 
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_W))
+		if (DarkMoon::Input::IsKeyPressed(Key::W))
 		{
 			//m_CameraPosition.y += m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
 		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_S))
+		else if (DarkMoon::Input::IsKeyPressed(Key::S))
 		{
 			//m_CameraPosition.y -= m_CameraTranslationSpeed * timeStep;
 			m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * timeStep;
@@ -45,11 +45,11 @@ namespace DarkMoon
 
 		if (m_Rotation)
 		{
-			if (DarkMoon::Input::IsKeyPressed(DM_KEY_Q))
+			if (DarkMoon::Input::IsKeyPressed(Key::Q))
 			{
 				m_CameraRotation += m_CameraRotationSpeed * timeStep;
 			}
-			else if (DarkMoon::Input::IsKeyPressed(DM_KEY_E))
+			else if (DarkMoon::Input::IsKeyPressed(Key::E))
 			{
 				m_CameraRotation -= m_CameraRotationSpeed * timeStep;
 			}

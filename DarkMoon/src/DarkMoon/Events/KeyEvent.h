@@ -1,32 +1,33 @@
 #pragma once
 
-#include "Event.h"
+#include "DarkMoon/Events/Event.h"
+#include "DarkMoon/Core/Input.h"
 
 namespace DarkMoon
 {
 	class DARKMOON_API KeyEvent : public Event
 	{
 	public:
-		inline int GetCode() const
+		inline KeyCode GetCode() const
 		{
 			return m_KeyCode;
 		}
 
 		EVENT_CALSS_CATEGORY(Keyboard | InputBoard)
 	protected:
-		KeyEvent(int keyCode)
+		KeyEvent(KeyCode keyCode)
 			: m_KeyCode(keyCode)
 		{
 
 		}
 
-		int m_KeyCode;
+		KeyCode m_KeyCode;
 	};
 
 	class DARKMOON_API KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keyCode, int repeatCount)
+		KeyPressedEvent(KeyCode keyCode, int repeatCount)
 			: KeyEvent(keyCode), m_RepeatCount(repeatCount)
 		{
 
@@ -52,7 +53,7 @@ namespace DarkMoon
 	class DARKMOON_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keyCode)
+		KeyReleasedEvent(KeyCode keyCode)
 			: KeyEvent(keyCode)
 		{
 
@@ -71,7 +72,7 @@ namespace DarkMoon
 	class DARKMOON_API KeyTypedEvent : public KeyEvent
 	{
 	public:
-		KeyTypedEvent(int keyCode)
+		KeyTypedEvent(KeyCode keyCode)
 			: KeyEvent(keyCode)
 		{
 

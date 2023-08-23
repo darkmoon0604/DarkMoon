@@ -8,17 +8,17 @@ namespace DarkMoon
 {
 	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
 
-	bool WindowsInput::IIsKeyPressed(int keyCode)
+	bool WindowsInput::IIsKeyPressed(KeyCode keyCode)
 	{
 		auto win = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(win, keyCode);
+		auto state = glfwGetKey(win, static_cast<int32_t>(keyCode));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IIsMouseButtonPressed(int button)
+	bool WindowsInput::IIsMouseButtonPressed(MouseCode button)
 	{
 		auto win = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetMouseButton(win, button);
+		auto state = glfwGetMouseButton(win, static_cast<int32_t>(button));
 		return state == GLFW_PRESS;
 	}
 

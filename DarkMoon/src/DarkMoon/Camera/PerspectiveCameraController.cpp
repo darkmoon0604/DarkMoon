@@ -20,23 +20,23 @@ namespace DarkMoon
 	{
 		DM_PROFILE_FUNCTION();
 		float velocity = m_MovementSpeed * timeStep;
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_A))
+		if (DarkMoon::Input::IsKeyPressed(Key::A))
 		{
 			glm::vec3 pos = m_Camera.GetPosition() + m_Camera.GetRight() * velocity;
 			m_Camera.SetPosition(pos);
 		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_D))
+		else if (DarkMoon::Input::IsKeyPressed(Key::D))
 		{
 			glm::vec3 pos = m_Camera.GetPosition() - m_Camera.GetRight() * velocity;
 			m_Camera.SetPosition(pos);
 		}
 
-		if (DarkMoon::Input::IsKeyPressed(DM_KEY_W))
+		if (DarkMoon::Input::IsKeyPressed(Key::W))
 		{
 			glm::vec3 pos = m_Camera.GetPosition() - m_Camera.GetFront() * velocity;
 			m_Camera.SetPosition(pos);
 		}
-		else if (DarkMoon::Input::IsKeyPressed(DM_KEY_S))
+		else if (DarkMoon::Input::IsKeyPressed(Key::S))
 		{
 			glm::vec3 pos = m_Camera.GetPosition() + m_Camera.GetFront() * velocity;
 			m_Camera.SetPosition(pos);

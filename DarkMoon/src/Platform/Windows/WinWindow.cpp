@@ -4,6 +4,7 @@
 #include "DarkMoon/Events/ApplicationEvent.h"
 #include "DarkMoon/Events/KeyEvent.h"
 #include "DarkMoon/Events/MouseEvent.h"
+#include "DarkMoon/Render/Render.h"
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
@@ -53,6 +54,13 @@ namespace DarkMoon
 
 		{
 			DM_PROFILE_SCOPE("glfw create window");
+#if defined(DM_DEBUG)
+			if (Render::GetAPI() == RendererAPI::API::OpenGL)
+			{
+				// debug 模式下开启opengl调试模式
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+			}
+#endif
 			m_Window = glfwCreateWindow(
 				(int)m_Data.m_Width,
 				(int)m_Data.m_Height,
@@ -101,19 +109,19 @@ namespace DarkMoon
 			{
 				case GLFW_PRESS:
 				{
-					KeyPressedEvent e(key, 0);
+					KeyPressedEvent e(static_cast<KeyCode>(key), 0);
 					data.m_CallBack(e);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					KeyReleasedEvent e(key);
+					KeyReleasedEvent e(static_cast<KeyCode>(key));
 					data.m_CallBack(e);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					KeyPressedEvent e(key, 1);
+					KeyPressedEvent e(static_cast<KeyCode>(key), 1);
 					data.m_CallBack(e);
 					break;
 				}
@@ -124,7 +132,7 @@ namespace DarkMoon
 		{
 			// window char event
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			KeyTypedEvent e(keycode);
+			KeyTypedEvent e(static_cast<KeyCode>(keycode));
 			data.m_CallBack(e);
 		});
 
@@ -136,13 +144,13 @@ namespace DarkMoon
 			{
 				case GLFW_PRESS:
 				{
-					MouseButtonPressedEvent e(button);
+					MouseButtonPressedEvent e(static_cast<MouseCode>(button));
 					data.m_CallBack(e);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					MouseButtonReleasedEvent e(button);
+					MouseButtonReleasedEvent e(static_cast<MouseCode>(button));
 					data.m_CallBack(e);
 					break;
 				}

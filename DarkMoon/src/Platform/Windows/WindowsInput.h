@@ -7,9 +7,9 @@ namespace DarkMoon
 	class WindowsInput : public Input
 	{
 	protected:
-		virtual bool IIsKeyPressed(int keyCode) override;
+		virtual bool IIsKeyPressed(KeyCode keyCode) override;
 
-		virtual bool IIsMouseButtonPressed(int button) override;
+		virtual bool IIsMouseButtonPressed(MouseCode button) override;
 		virtual float IGetMousePositionX() override;
 		virtual float IGetMousePositionY() override;
 		virtual std::pair<float, float> IGetMousePosition() override;

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Event.h"
+#include "DarkMoon/Events/Event.h"
+#include "DarkMoon/Core/Input.h"
 
 namespace DarkMoon
 {
@@ -31,7 +32,7 @@ namespace DarkMoon
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CALSS_CATEGORY(Mouse | InputBoard)
+		EVENT_CALSS_CATEGORY(EventCategoryMouse | InputBoard)
 	private:
 		float m_MouseX, m_MouseY;
 	};
@@ -63,7 +64,7 @@ namespace DarkMoon
 		}
 
 		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CALSS_CATEGORY(Mouse | InputBoard)
+		EVENT_CALSS_CATEGORY(EventCategoryMouse | InputBoard)
 	private:
 		float m_XOffset, m_YOffset;
 	};
@@ -71,25 +72,25 @@ namespace DarkMoon
 	class DARKMOON_API MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const
+		inline MouseCode GetMouseButton() const
 		{
 			return m_Button;
 		}
 
-		EVENT_CALSS_CATEGORY(Mouse | InputBoard)
+		EVENT_CALSS_CATEGORY(EventCategoryMouse | InputBoard)
 	protected:
-		MouseButtonEvent(int button)
+		MouseButtonEvent(MouseCode button)
 			: m_Button(button)
 		{
 
 		}
-		int m_Button;
+		MouseCode m_Button;
 	};
 
 	class DARKMOON_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressedEvent(int button)
+		MouseButtonPressedEvent(MouseCode button)
 			: MouseButtonEvent(button)
 		{
 
@@ -108,7 +109,7 @@ namespace DarkMoon
 	class DARKMOON_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(int button)
+		MouseButtonReleasedEvent(MouseCode button)
 			: MouseButtonEvent(button)
 		{
 

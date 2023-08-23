@@ -8,7 +8,7 @@
 
 #include "DarkMoon/Core/Input.h"
 #include "DarkMoon/Core/KeyCodes.h"
-#include "DarkMoon/Core/MouseButtonCodes.h"
+#include "DarkMoon/Core/MouseCodes.h"
 
 // IMGUI
 #include "DarkMoon/Imgui/ImguiLayer.h"
