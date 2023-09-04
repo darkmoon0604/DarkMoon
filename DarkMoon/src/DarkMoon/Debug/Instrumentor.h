@@ -6,6 +6,7 @@
 #include <chrono>
 #include <algorithm>
 #include <fstream>
+#include <thread>
 
 namespace DarkMoon
 {
@@ -13,7 +14,7 @@ namespace DarkMoon
 	{
 		std::string m_Name;
 		long long m_Start, m_End;
-		uint32_t m_ThreadId;
+		std::thread::id m_ThreadId;
 	};
 
 	struct InstrumentationSession
@@ -24,57 +25,76 @@ namespace DarkMoon
 	class DARKMOON_API Instrumentor
 	{
 	private:
+		std::mutex m_Mutex; //Ïß³ÌËø
 		InstrumentationSession* m_CurrentSession;
 		std::ofstream m_OutputStream;
-		int m_ProfileCount;
 	public:
 		Instrumentor()
-			: m_CurrentSession(nullptr), m_ProfileCount(0)
+			: m_CurrentSession(nullptr)
 		{
 
 		}
 
 		void BeginSession(const std::string& name, const std::string& filePath = "debug.json")
 		{
+			std::lock_guard lock(m_Mutex);
+			if (m_CurrentSession)
+			{
+				if (Log::GetCoreLogger())
+				{
+					DM_LOG_CORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_CurrentSession->m_Name);
+					InternalEndSession();
+				}
+			}
 			m_OutputStream.open(filePath);
-			WriteHeader();
-			m_CurrentSession = new InstrumentationSession{ name };
+			if (m_OutputStream.is_open())
+			{
+				m_CurrentSession = new InstrumentationSession{ name };
+				WriteHeader();
+			}
+			else
+			{
+				if (Log::GetCoreLogger())
+				{
+					DM_LOG_CORE_ERROR("Instrumentor could not open results file '{0}.'", filePath);
+				}
+			}
 		}
 
 		void EndSession()
 		{
-			WriteFooter();
-			m_OutputStream.close();
-			delete m_CurrentSession;
-			m_CurrentSession = nullptr;
-			m_ProfileCount = 0;
+			std::lock_guard lock(m_Mutex);
+			InternalEndSession();
 		}
 
 		void WriteProfile(const ProfileResult& result)
 		{
-			if (m_ProfileCount++ > 0)
-			{
-				m_OutputStream << ",";
-			}
+			std::stringstream json;
 
 			std::string name = result.m_Name;
 			std::replace(name.begin(), name.end(), '"', '\'');
 
-			m_OutputStream << "{";
-			m_OutputStream << "\"cat\":\"function\",";
-			m_OutputStream << "\"dur\":" << (result.m_End - result.m_Start) << ",";
-			m_OutputStream << "\"name\":\"" << name << "\",";
-			m_OutputStream << "\"ph\":\"x\",";
-			m_OutputStream << "\"pid\":0,";
-			m_OutputStream << "\"tid\":" << result.m_ThreadId << ",";
-			m_OutputStream << "\"ts\":" << result.m_Start;
-			m_OutputStream << "}";
-			m_OutputStream.flush();
+			json << ", {";
+			json << "\"cat\":\"function\", ";
+			json << "\"dur\":" << (result.m_End - result.m_Start) << ", ";
+			json << "\"name\":\"" << name << "\", ";
+			json << "\"ph\":\"x\", ";
+			json << "\"pid\":0, ";
+			json << "\"tid\":" << result.m_ThreadId << ", ";
+			json << "\"ts\":" << result.m_Start;
+			json << "}";
+
+			std::lock_guard lock(m_Mutex);
+			if (m_CurrentSession)
+			{
+				m_OutputStream << json.str();
+				m_OutputStream.flush();
+			}
 		}
 
 		void WriteHeader()
 		{
-			m_OutputStream << "{\"otherData\":{},\"traceEvents\":[";
+			m_OutputStream << "{\"otherData\":{},\"traceEvents\":[{}";
 			m_OutputStream.flush();
 		}
 
@@ -82,6 +102,17 @@ namespace DarkMoon
 		{
 			m_OutputStream << "]}";
 			m_OutputStream.flush();
+		}
+
+		void InternalEndSession()
+		{
+			if (m_CurrentSession)
+			{
+				WriteFooter();
+				m_OutputStream.close();
+				delete m_CurrentSession;
+				m_CurrentSession = nullptr;
+			}
 		}
 
 		static Instrumentor& Get()
@@ -114,7 +145,7 @@ namespace DarkMoon
 			long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimePoint).time_since_epoch().count();
 			long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch().count();
 			uint32_t threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
-			Instrumentor::Get().WriteProfile({ m_Name, start, end, threadId });
+			Instrumentor::Get().WriteProfile({ m_Name, start, end, std::this_thread::get_id() });
 			m_Stopped = true;
 		}
 	private:
