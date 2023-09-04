@@ -11,6 +11,8 @@
 
 #include "DarkMoon/Imgui/ImguiLayer.h"
 
+int main(int argc, char** argv);
+
 namespace DarkMoon {
 	class DARKMOON_API Application
 	{
@@ -18,7 +20,6 @@ namespace DarkMoon {
 		Application();
 		virtual ~Application();
 
-		void Run();
 		void OnEvent(Event& e);
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
@@ -33,6 +34,7 @@ namespace DarkMoon {
 			return *s_Instance;
 		}
 	private:
+		void Run();
 		bool OnWindowClosed(WindowClosedEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
@@ -44,6 +46,7 @@ namespace DarkMoon {
 		float m_LastFrameTime = 0.0f;
 	private:
 		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	// 需要在客户端程序定义

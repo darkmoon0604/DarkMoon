@@ -6,8 +6,6 @@
 
 namespace DarkMoon
 {
-	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
-
 	bool WindowsInput::IIsKeyPressed(KeyCode keyCode)
 	{
 		auto win = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());

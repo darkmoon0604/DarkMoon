@@ -17,11 +17,6 @@ namespace DarkMoon
 		DM_LOG_CORE_ERROR("GLFW Error {0}{1}", code, desc);
 	}
 
-	Scope<Window> Window::Create(const WindowProperty& props)
-	{
-		return CreateScope<WinWindow>(props);
-	}
-
 	WinWindow::WinWindow(const WindowProperty& props)
 	{
 		DM_PROFILE_FUNCTION();

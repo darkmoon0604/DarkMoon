@@ -38,6 +38,8 @@ namespace DarkMoon
 		{
 			return s_Instance->IGetMousePosition();
 		}
+
+		static Scope<Input> Create();
 	protected:
 		/// <summary>
 		/// 需要子类实现的接口
