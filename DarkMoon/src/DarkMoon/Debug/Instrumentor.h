@@ -7,13 +7,17 @@
 #include <algorithm>
 #include <fstream>
 #include <thread>
+#include <iomanip>
 
 namespace DarkMoon
 {
+	using FloatingPointMicroseconds = std::chrono::duration<double, std::micro>;
+
 	struct ProfileResult
 	{
 		std::string m_Name;
-		long long m_Start, m_End;
+		FloatingPointMicroseconds m_Start;
+		std::chrono::microseconds m_ElapsedTime;
 		std::thread::id m_ThreadId;
 	};
 
@@ -74,14 +78,15 @@ namespace DarkMoon
 			std::string name = result.m_Name;
 			std::replace(name.begin(), name.end(), '"', '\'');
 
+			json << std::setprecision(3) << std::fixed; //格式化输出为小数点3位小数
 			json << ", {";
 			json << "\"cat\":\"function\", ";
-			json << "\"dur\":" << (result.m_End - result.m_Start) << ", ";
+			json << "\"dur\":" << (result.m_ElapsedTime.count()) << ", ";
 			json << "\"name\":\"" << name << "\", ";
 			json << "\"ph\":\"x\", ";
 			json << "\"pid\":0, ";
 			json << "\"tid\":" << result.m_ThreadId << ", ";
-			json << "\"ts\":" << result.m_Start;
+			json << "\"ts\":" << result.m_Start.count();
 			json << "}";
 
 			std::lock_guard lock(m_Mutex);
@@ -128,7 +133,7 @@ namespace DarkMoon
 		InstrumentationTimer(const char* name)
 			: m_Name(name), m_Stopped(false)
 		{
-			m_StartTimePoint = std::chrono::high_resolution_clock::now();
+			m_StartTimePoint = std::chrono::steady_clock::now();
 		}
 
 		~InstrumentationTimer()
@@ -141,16 +146,15 @@ namespace DarkMoon
 
 		void Stop()
 		{
-			auto endTimePoint = std::chrono::high_resolution_clock::now();
-			long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimePoint).time_since_epoch().count();
-			long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch().count();
-			uint32_t threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
-			Instrumentor::Get().WriteProfile({ m_Name, start, end, std::this_thread::get_id() });
+			auto endTimePoint = std::chrono::steady_clock::now();
+			auto highResStart = FloatingPointMicroseconds{ m_StartTimePoint.time_since_epoch() };
+			auto elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimePoint).time_since_epoch();
+			Instrumentor::Get().WriteProfile({ m_Name, highResStart, elapsedTime, std::this_thread::get_id() });
 			m_Stopped = true;
 		}
 	private:
 		const char* m_Name;
-		std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimePoint;
+		std::chrono::time_point<std::chrono::steady_clock> m_StartTimePoint;
 		bool m_Stopped;
 	};
 }
