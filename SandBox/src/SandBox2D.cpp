@@ -40,10 +40,10 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 		DM_PROFILE_SCOPE("Renderer Draw");
 		DarkMoon::Render2D::BeginScene(m_CameraController.GetCamera());
 
-		DarkMoon::Render2D::DrawQuad(glm::vec2(m_PosX, m_PosY), { m_SizeX, m_SizeY }, m_SquareColor);
+		DarkMoon::Render2D::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
 		DarkMoon::Render2D::DrawQuad(glm::vec2(0.5f, -0.5f), glm::vec2(0.5f, 0.75f), m_BackgroundColor);
-		DarkMoon::Render2D::DrawQuad(glm::vec3(0.0f, 0.0f, -0.1f), glm::vec2(10.0f, 10.0f), m_CheckerboardTexture);
-
+		DarkMoon::Render2D::DrawQuad(glm::vec3(0.0f, 0.0f, -0.1f), glm::vec2(10.0f, 10.0f), m_CheckerboardTexture, 10.0f);
+		DarkMoon::Render2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.5f, 0.5f }, glm::radians(-30.0f), m_CheckerboardTexture, m_Factor, { 0.8f, 0.2f, 0.3f, 1.0f });
 		DarkMoon::Render2D::EndScene();
 	}
 }
@@ -59,6 +59,7 @@ void SandBox2D::OnImguiRender()
 	ImGui::SliderFloat("Square SizeY", &m_SizeY, 0.1f, 1.0f);
 	ImGui::SliderFloat("Square PosX", &m_PosX, -1.0f, 1.0f);
 	ImGui::SliderFloat("Square PosY", &m_PosY, -1.0f, 1.0f);
+	ImGui::SliderFloat("Factor", &m_Factor, 0.1f, 10.0f);
 
 	ImGui::End();
 }

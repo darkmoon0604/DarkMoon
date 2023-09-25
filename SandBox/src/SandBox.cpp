@@ -11,8 +11,8 @@ public:
 	SandBox()
 	{
 		GetWindow().IsShowCursor(true);
-		PushLayer(new ExampleLayer());
-		//PushLayer(new SandBox2D());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new SandBox2D());
 		//PushLayer(new SandBox3D());
 	}
 	~SandBox()

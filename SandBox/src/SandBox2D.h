@@ -24,5 +24,6 @@ private:
 	glm::vec4 m_BackgroundColor = { 0.1f, 0.1f, 0.1f, 1.0f };
 	float m_SizeX = 0.2f, m_SizeY = 0.1f;
 	float m_PosX = -1.0f, m_PosY = 0.5f;
+	float m_Factor = 1.0f;
 };
 

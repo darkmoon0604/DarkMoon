@@ -88,6 +88,7 @@ namespace DarkMoon
 	{
 		DM_PROFILE_FUNCTION();
 		s_Data->TextureShader->SetFloat4("uColor", color);
+		s_Data->TextureShader->SetFloat("uTilingFactor", 1.0f);
 		s_Data->WhiteTexture->Bind();
 
 		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -96,17 +97,54 @@ namespace DarkMoon
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor/* = 1.0f*/, const glm::vec4& tintColor/* = glm::vec4(1.0f)*/)
 	{
-		DrawQuad({ position.x, position.y, 1.0f }, size, texture);
+		DrawQuad({ position.x, position.y, 1.0f }, size, texture, tilingFactor, tintColor);
 	}
 
-	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
+	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor/* = 1.0f*/, const glm::vec4& tintColor/* = glm::vec4(1.0f)*/)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetFloat4("uColor", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat4("uColor", tintColor);
+		s_Data->TextureShader->SetFloat("uTilingFactor", tilingFactor);
 		texture->Bind();
 		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("uTransform", transform);
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Render2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 1.0f }, size, rotation, color);
+	}
+
+	void Render2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		DM_PROFILE_FUNCTION();
+		s_Data->TextureShader->SetFloat4("uColor", color);
+		s_Data->TextureShader->SetFloat("uTilingFactor", 1.0f);
+		s_Data->WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		s_Data->TextureShader->SetMat4("uTransform", transform);
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Render2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor /*= 1.0f*/, const glm::vec4& tintColor /*= glm::vec4(1.0f)*/)
+	{
+		DrawRotatedQuad({ position.x, position.y, 1.0f }, size, rotation, texture, tilingFactor, tintColor);
+	}
+
+	void Render2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor /*= 1.0f*/, const glm::vec4& tintColor /*= glm::vec4(1.0f)*/)
+	{
+		DM_PROFILE_FUNCTION();
+		s_Data->TextureShader->SetFloat4("uColor", tintColor);
+		s_Data->TextureShader->SetFloat("uTilingFactor", tilingFactor);
+		s_Data->WhiteTexture->Bind();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		s_Data->TextureShader->SetMat4("uTransform", transform);
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
