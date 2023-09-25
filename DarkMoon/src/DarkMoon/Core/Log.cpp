@@ -2,6 +2,9 @@
 
 #include "Log.h"
 
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
+
 namespace DarkMoon
 {
 	Ref<spdlog::logger> Log::s_CoreLogger;
@@ -9,12 +12,21 @@ namespace DarkMoon
 
 	void Log::Init(const char* clientName /* = "APP" */)
 	{
-		spdlog::set_pattern("%^[%T] %n : %v%$");
+		std::vector<spdlog::sink_ptr> logSinks;
+		logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_st>("DarkMoon.log", true));
 
-		s_CoreLogger = spdlog::stdout_color_mt("DARKMOON");
+		logSinks[0]->set_pattern("%^[%T] %n : %v%$");
+		logSinks[1]->set_pattern("%[%T] [%l] %n: %v");
+
+		s_CoreLogger = std::make_shared<spdlog::logger>("DARKMOON", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_CoreLogger);
 		s_CoreLogger->set_level(spdlog::level::trace);
+		s_CoreLogger->flush_on(spdlog::level::trace);
 
-		s_ClientLogger = spdlog::stdout_color_mt(clientName);
+		s_ClientLogger = std::make_shared<spdlog::logger>(clientName, begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_ClientLogger);
 		s_ClientLogger->set_level(spdlog::level::trace);
+		s_ClientLogger->flush_on(spdlog::level::trace);
 	}
 }
