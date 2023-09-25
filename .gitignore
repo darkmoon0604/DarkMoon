@@ -11,3 +11,4 @@ bin-tmp/
 *.filters
 *.json
 SandBox/imgui.ini
+SandBox/*.log
