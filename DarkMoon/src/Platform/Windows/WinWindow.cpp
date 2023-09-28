@@ -43,7 +43,7 @@ namespace DarkMoon
 			DM_PROFILE_SCOPE("glfw init");
 			DM_LOG_CORE_INFO("Initializing GLFW!");
 			int success = glfwInit();
-			DM_CORE_ASSERT(success, "Cound not intialize GLFW!");
+			DM_CORE_ASSERT(success, "Cound not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallBack);
 		}
 
