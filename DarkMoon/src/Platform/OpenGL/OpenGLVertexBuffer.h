@@ -6,8 +6,11 @@ namespace DarkMoon
 	class DARKMOON_API OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
+		OpenGLVertexBuffer(uint32_t size);
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
 		virtual ~OpenGLVertexBuffer();
+
+		virtual void SetData(const void* data, uint32_t size) override;
 
 		virtual void Bind() const override;
 		virtual void UnBind() const override;

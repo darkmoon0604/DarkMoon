@@ -12,71 +12,99 @@
 
 namespace DarkMoon
 {
-	struct Render2DStorage
+	struct QuadVertex
 	{
-		Ref<VertexArray> QuadVertexArray;
-		Ref<Shader> TextureShader;
-		Ref<Texture2D> WhiteTexture;
+		glm::vec3 m_Position;
+		glm::vec4 m_Color;
+		glm::vec2 m_TexCoord;
 	};
 
-	static Render2DStorage* s_Data;
+	struct Renderer2DData
+	{
+		const uint32_t m_MaxQuads = 10000;
+		const uint32_t m_MaxVertices = m_MaxQuads * 4;
+		const uint32_t m_MaxIndices = m_MaxQuads * 6;
+
+		Ref<VertexArray> m_QuadVertexArray;
+		Ref<VertexBuffer> m_QuadVertexBuffer;
+		Ref<Shader> m_TextureShader;
+		Ref<Texture2D> m_WhiteTexture;
+
+		uint32_t m_QuadIndexCount = 0;
+		QuadVertex* m_QuadVertexBufferBase = nullptr;
+		QuadVertex* m_QuadVertexBufferPtr = nullptr;
+	};
+
+	static Renderer2DData s_Data;
 
 	void Render2D::Init()
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data = new Render2DStorage();
-		s_Data->QuadVertexArray = VertexArray::Create();
+		s_Data.m_QuadVertexArray = VertexArray::Create();
+		s_Data.m_QuadVertexBuffer = VertexBuffer::Create(s_Data.m_MaxVertices * sizeof(QuadVertex));
+		s_Data.m_QuadVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "aPos"},
+			{ ShaderDataType::Float4, "aColor"},
+			{ ShaderDataType::Float2, "aTexcoord"},
+		});
+		s_Data.m_QuadVertexArray->AddVertexBuffer(s_Data.m_QuadVertexBuffer);
+		s_Data.m_QuadVertexBufferBase = new QuadVertex[s_Data.m_MaxVertices];
+		uint32_t* quadIndices = new uint32_t[s_Data.m_MaxIndices];
 
-		float squareVertices[5 * 4] = 
+		uint32_t offset = 0;
+		for (uint32_t i = 0; i < s_Data.m_MaxIndices; i += 6)
 		{
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
-		};
+			quadIndices[i + 0] = offset + 0;
+			quadIndices[i + 1] = offset + 1;
+			quadIndices[i + 2] = offset + 2;
 
-		Ref<VertexBuffer> squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
-		squareVB->SetLayout(
-			{
-				{
-					ShaderDataType::Float3, "aPos"
-				},
-				{
-					ShaderDataType::Float2, "aTexcoord"
-				},
-			}
-		);
-		s_Data->QuadVertexArray->AddVertexBuffer(squareVB);
+			quadIndices[i + 3] = offset + 2;
+			quadIndices[i + 4] = offset + 3;
+			quadIndices[i + 5] = offset + 0;
 
-		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Ref<IndexBuffer> squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
-		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
-	
-		s_Data->WhiteTexture = Texture2D::Create(1, 1);
+			offset += 4;
+		}
+
+		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.m_MaxIndices);
+		s_Data.m_QuadVertexArray->SetIndexBuffer(quadIB);
+		delete[] quadIndices;
+
+		s_Data.m_WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		s_Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+		s_Data.m_WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
-		s_Data->TextureShader = Shader::Create("assets/shaders/texture.glsl");
-		s_Data->TextureShader->Use();
-		s_Data->TextureShader->SetInt("uTexture", 0);
+		s_Data.m_TextureShader = Shader::Create("assets/shaders/texture.glsl");
+		s_Data.m_TextureShader->Use();
+		s_Data.m_TextureShader->SetInt("uTexture", 0);
 	}
 
 	void Render2D::Shutdown()
 	{
 		DM_PROFILE_FUNCTION();
-		delete s_Data;
 	}
 
 	void Render2D::BeginScene(const OrthographicCamera& camera)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data->TextureShader->Use();
-		s_Data->TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
+		s_Data.m_TextureShader->Use();
+		s_Data.m_TextureShader->SetMat4("uViewProjection", camera.GetViewProjectionMatrix());
+
+		s_Data.m_QuadIndexCount = 0;
+		s_Data.m_QuadVertexBufferPtr = s_Data.m_QuadVertexBufferBase;
 	}
 
 	void Render2D::EndScene()
 	{
 		DM_PROFILE_FUNCTION();
+
+		uint32_t dataSize = (uint8_t*)s_Data.m_QuadVertexBufferPtr - (uint8_t*)s_Data.m_QuadVertexBufferBase;
+		s_Data.m_QuadVertexBuffer->SetData(s_Data.m_QuadVertexBufferBase, dataSize);
+		Flush();
+	}
+
+	void Render2D::Flush()
+	{
+		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray, s_Data.m_QuadIndexCount);
 	}
 
 	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
@@ -87,14 +115,28 @@ namespace DarkMoon
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetFloat4("uColor", color);
-		s_Data->TextureShader->SetFloat("uTilingFactor", 1.0f);
-		s_Data->WhiteTexture->Bind();
 
-		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data->TextureShader->SetMat4("uTransform", transform);
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data.m_QuadVertexBufferPtr->m_Position = position;
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x + size.x, position.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 1.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x + size.x, position.y + size.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 1.0f, 1.0f };
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x, position.y + size.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 1.0f };
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadIndexCount += 6;
 	}
 
 	void Render2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor/* = 1.0f*/, const glm::vec4& tintColor/* = glm::vec4(1.0f)*/)
@@ -105,13 +147,13 @@ namespace DarkMoon
 	void Render2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor/* = 1.0f*/, const glm::vec4& tintColor/* = glm::vec4(1.0f)*/)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetFloat4("uColor", tintColor);
-		s_Data->TextureShader->SetFloat("uTilingFactor", tilingFactor);
+		s_Data.m_TextureShader->SetFloat4("uColor", tintColor);
+		s_Data.m_TextureShader->SetFloat("uTilingFactor", tilingFactor);
 		texture->Bind();
 		auto transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data->TextureShader->SetMat4("uTransform", transform);
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data.m_TextureShader->SetMat4("uTransform", transform);
+		s_Data.m_QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);
 	}
 
 	void Render2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
@@ -122,14 +164,14 @@ namespace DarkMoon
 	void Render2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetFloat4("uColor", color);
-		s_Data->TextureShader->SetFloat("uTilingFactor", 1.0f);
-		s_Data->WhiteTexture->Bind();
+		s_Data.m_TextureShader->SetFloat4("uColor", color);
+		s_Data.m_TextureShader->SetFloat("uTilingFactor", 1.0f);
+		s_Data.m_WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data->TextureShader->SetMat4("uTransform", transform);
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data.m_TextureShader->SetMat4("uTransform", transform);
+		s_Data.m_QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);
 	}
 
 	void Render2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor /*= 1.0f*/, const glm::vec4& tintColor /*= glm::vec4(1.0f)*/)
@@ -140,14 +182,14 @@ namespace DarkMoon
 	void Render2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor /*= 1.0f*/, const glm::vec4& tintColor /*= glm::vec4(1.0f)*/)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data->TextureShader->SetFloat4("uColor", tintColor);
-		s_Data->TextureShader->SetFloat("uTilingFactor", tilingFactor);
-		s_Data->WhiteTexture->Bind();
+		s_Data.m_TextureShader->SetFloat4("uColor", tintColor);
+		s_Data.m_TextureShader->SetFloat("uTilingFactor", tilingFactor);
+		s_Data.m_WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		s_Data->TextureShader->SetMat4("uTransform", transform);
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data.m_TextureShader->SetMat4("uTransform", transform);
+		s_Data.m_QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);
 	}
 
 }
