@@ -38,7 +38,7 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 
 	{
 		static float rotation = 0.0f;
-		rotation *= timeStep * 50.0f;
+		rotation += timeStep * 50.0f;
 
 		DM_PROFILE_SCOPE("Renderer Draw");
 		DarkMoon::Render2D::BeginScene(m_CameraController.GetCamera());
