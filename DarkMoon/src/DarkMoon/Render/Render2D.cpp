@@ -39,6 +39,8 @@ namespace DarkMoon
 
 		std::array<Ref<Texture2D>, m_MaxTextureSlots> m_TextureSlots;
 		uint32_t m_TextureSlotIndex = 1;
+
+		glm::vec4 m_QuadVertexPositions[4];
 	};
 
 	static Renderer2DData s_Data;
@@ -93,6 +95,11 @@ namespace DarkMoon
 		s_Data.m_TextureShader->SetIntArray("uTextures", samples, s_Data.m_MaxTextureSlots);
 		// set all texture slots to 0
 		s_Data.m_TextureSlots[0] = s_Data.m_WhiteTexture;
+
+		s_Data.m_QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+		s_Data.m_QuadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+		s_Data.m_QuadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+		s_Data.m_QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 	}
 
 	void Render2D::Shutdown()
@@ -144,28 +151,30 @@ namespace DarkMoon
 		const float texIndex = 0.0f;
 		const float tilingFactor = 1.0f;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = position;
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[0];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
 		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
 		s_Data.m_QuadVertexBufferPtr++;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x + size.x, position.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[1];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 1.0f, 0.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
 		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
 		s_Data.m_QuadVertexBufferPtr++;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x + size.x, position.y + size.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[2];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 1.0f, 1.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
 		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
 		s_Data.m_QuadVertexBufferPtr++;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x, position.y + size.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[3];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 1.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
@@ -202,28 +211,30 @@ namespace DarkMoon
 			s_Data.m_TextureSlotIndex++;
 		}
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = position;
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[0];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
 		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
 		s_Data.m_QuadVertexBufferPtr++;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x + size.x, position.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[1];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 1.0f, 0.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
 		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
 		s_Data.m_QuadVertexBufferPtr++;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x + size.x, position.y + size.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[2];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 1.0f, 1.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
 		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
 		s_Data.m_QuadVertexBufferPtr++;
 
-		s_Data.m_QuadVertexBufferPtr->m_Position = { position.x, position.y + size.y, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[3];
 		s_Data.m_QuadVertexBufferPtr->m_Color = color;
 		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 1.0f };
 		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
@@ -250,14 +261,51 @@ namespace DarkMoon
 	void Render2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data.m_TextureShader->SetFloat4("uColor", color);
+		/*s_Data.m_TextureShader->SetFloat4("uColor", color);
 		s_Data.m_TextureShader->SetFloat("uTilingFactor", 1.0f);
 		s_Data.m_WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		s_Data.m_TextureShader->SetMat4("uTransform", transform);
 		s_Data.m_QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);
+		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);*/
+
+		const float texIndex = 0.0f; // white texture
+		const float tilingFactor = 1.0f;
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[0];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[1];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[2];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[3];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadIndexCount += 6;
 	}
 
 	void Render2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor /*= 1.0f*/, const glm::vec4& tintColor /*= glm::vec4(1.0f)*/)
@@ -268,14 +316,66 @@ namespace DarkMoon
 	void Render2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor /*= 1.0f*/, const glm::vec4& tintColor /*= glm::vec4(1.0f)*/)
 	{
 		DM_PROFILE_FUNCTION();
-		s_Data.m_TextureShader->SetFloat4("uColor", tintColor);
+		/*s_Data.m_TextureShader->SetFloat4("uColor", tintColor);
 		s_Data.m_TextureShader->SetFloat("uTilingFactor", tilingFactor);
 		s_Data.m_WhiteTexture->Bind();
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 		s_Data.m_TextureShader->SetMat4("uTransform", transform);
 		s_Data.m_QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);
+		RenderCommand::DrawIndexed(s_Data.m_QuadVertexArray);*/
+
+		constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float texIndex = 0.0f;
+		for (uint32_t i = 1; i < s_Data.m_QuadIndexCount; i++)
+		{
+			if (*s_Data.m_TextureSlots[i].get() == *texture.get())
+			{
+				texIndex = (float)i;
+				break;
+			}
+		}
+
+		if (texIndex == 0.0f)
+		{
+			texIndex = (float)s_Data.m_TextureSlotIndex;
+			s_Data.m_TextureSlots[s_Data.m_TextureSlotIndex] = texture;
+			s_Data.m_TextureSlotIndex++;
+		}
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[0];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[1];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[2];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadVertexBufferPtr->m_Position = transform * s_Data.m_QuadVertexPositions[3];
+		s_Data.m_QuadVertexBufferPtr->m_Color = color;
+		s_Data.m_QuadVertexBufferPtr->m_TexCoord = { 0.0f, 0.0f };
+		s_Data.m_QuadVertexBufferPtr->m_TexIndex = texIndex;
+		s_Data.m_QuadVertexBufferPtr->m_TilingFactor = tilingFactor;
+		s_Data.m_QuadVertexBufferPtr++;
+
+		s_Data.m_QuadIndexCount += 6;
 	}
 
 }

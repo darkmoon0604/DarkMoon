@@ -37,15 +37,18 @@ void SandBox2D::OnUpdate(DarkMoon::TimeStep timeStep)
 	}
 
 	{
+		static float rotation = 0.0f;
+		rotation *= timeStep * 50.0f;
+
 		DM_PROFILE_SCOPE("Renderer Draw");
 		DarkMoon::Render2D::BeginScene(m_CameraController.GetCamera());
 
-		//DarkMoon::Render2D::DrawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
+		DarkMoon::Render2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
 		DarkMoon::Render2D::DrawQuad(glm::vec2(-1.0f, 0.0f), glm::vec2(0.8f, 0.8f), m_BackgroundColor);
 		//DarkMoon::Render2D::DrawQuad(glm::vec2(0.5f, -0.5f), glm::vec2(0.5f, 0.75f), m_BackgroundColor);
 		DarkMoon::Render2D::DrawQuad(glm::vec3(-5.0f, -5.0f, -0.1f), glm::vec2(10.0f, 10.0f), m_CheckerboardTexture, 10.0f);
 		DarkMoon::Render2D::DrawQuad(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 1.0f), m_CheckerboardTexture, 20.0f);
-		//DarkMoon::Render2D::DrawRotatedQuad({ 1.0f, 0.0f }, { 0.5f, 0.5f }, glm::radians(-30.0f), m_CheckerboardTexture, m_Factor, { 0.8f, 0.2f, 0.3f, 1.0f });
+		DarkMoon::Render2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, rotation, m_CheckerboardTexture, 20.0f);
 		DarkMoon::Render2D::EndScene();
 	}
 }
